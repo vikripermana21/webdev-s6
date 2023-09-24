@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
     "Username": "Amaw",
-    "Password": "password123", // Pastikan untuk mengenkripsi password sebelumnya sebelum mengirimnya
+    "Password": "password123",
     "Full_Name": "Amaw Smith",
     "Email": "maw@gmail.com",
     "Phone_Number": "123-456-7890",
