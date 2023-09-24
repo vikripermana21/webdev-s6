@@ -1,0 +1,25 @@
+GET http://127.0.0.1:5000/lecturers
+
+###
+POST http://127.0.0.1:5000/lecturers
+Content-Type: application/json
+
+{
+    "Username": "Amaw",
+    "Password": "password123", // Pastikan untuk mengenkripsi password sebelumnya sebelum mengirimnya
+    "Full_Name": "Amaw Smith",
+    "Email": "maw@gmail.com",
+    "Phone_Number": "123-456-7890",
+    "Position": "Lecturer",
+    "Major": "Computer Science",
+    "Profile": {
+        "Date_of_birth": "1990-01-01",
+        "gender": "Female",
+        "Bio": "A lecturer in Computer Science",
+        "Profile_Picture": "https://example.com/profile-picture.jpg"
+    },
+    "Teaching_History": [], 
+    "Education_History": [], 
+    "Research": [], 
+    "PKM": [] 
+}
