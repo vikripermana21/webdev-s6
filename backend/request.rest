@@ -23,3 +23,31 @@ Content-Type: application/json
     "Research": [], 
     "PKM": [] 
 }
+
+###
+POST http://localhost:5000/admin
+Content-Type: application/json
+
+{
+    "nip" :"1982973286",
+    "password" : "dosen12334",
+    "role" : "Dosen"
+}
+
+###
+GET http://localhost:5000/account
+
+###
+POST http://localhost:5000/lecturer
+Content-Type: application/json
+
+{
+    "profile_picture" :"https://example.com/images/profile.jpg",
+    "full_name" : "Bambang Wicak",
+    "place_of_birth" : "Bandung",
+    "date_of_birth" : "1989-09-09",
+    "gender" : "Laki-Laki",
+    "email" : "dosen1@gmail.com",
+    "bio" : "Biooo",
+    "id_user_account" : "1"
+}
