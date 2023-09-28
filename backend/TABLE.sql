@@ -75,6 +75,8 @@ ALTER TABLE education_history DROP CONSTRAINT IF EXISTS education_history_id_dos
 ALTER TABLE research DROP CONSTRAINT IF EXISTS research_id_dosen_fk;
 ALTER TABLE pkm DROP CONSTRAINT IF EXISTS pkm_id_dosen_fk;
 ALTER TABLE user_account DROP CONSTRAINT IF EXISTS user_account_id_dosen_fk;
+ALTER TABLE research ALTER COLUMN research_title TYPE VARCHAR(250);
+
 
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
@@ -92,3 +94,4 @@ DROP TABLE IF EXISTS education_history;
 DROP TABLE IF EXISTS research;
 DROP TABLE IF EXISTS pkm;
 DROP TABLE IF EXISTS user_account;
+
