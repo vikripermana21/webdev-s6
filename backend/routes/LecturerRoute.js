@@ -3,7 +3,7 @@ import { createAccount, getAllAccounts, getAccountById, login } from "../control
 import { getAllLecturers, createLecturer, getLecturerById, updateLecturer, deleteLecturer } from "../controllers/ProfileController.js";
 // import { createTeachingHistory, showAllTeachingHistory, getTeachingHistoryById, updateTeachingHistory, deleteTeachingHistory } from "../controllers/TeachingHistoryController.js";
 import { createEducationHistory, showAllEducationHistory, getEducationHistoryById, updateEducationHistory, deleteEducationHistory } from "../controllers/EduHistoryController.js";
-// import { createResearch, showAllResearch, getResearchById, updateResearch, deleteResearch } from "../controllers/ResearchControllers.js";
+import { createResearch, showAllResearch, getResearchById, updateResearch, deleteResearch } from "../controllers/ResearchController.js";
 // import { createPKM, showAllPKM, getPKMById, updatePKM, deletePKM } from "../controllers/PKMController.js";
 
 const router = express.Router();
@@ -40,11 +40,11 @@ router.patch('/education-history/:id_education_history', updateEducationHistory)
 router.delete('/education-history/:id_education_history', deleteEducationHistory);
 
 // Research
-// router.post('/research', createResearch);
-// router.get('/research/:id_dosen', showAllResearch); //tampilkan semua research berdasarkan id_dosen
-// router.get('/research/:id_dosen/:id_research', getResearchById); //tampilkan berdasarkan id_research (spesifik)
-// router.patch('/research/:id_research', updateResearch);
-// router.delete('/research/:id_research', deleteResearch);
+router.post('/research', createResearch);
+router.get('/research/:id_dosen', showAllResearch); //tampilkan semua research berdasarkan id_dosen
+router.get('/research/:id_dosen/:id_research', getResearchById); //tampilkan berdasarkan id_research (spesifik)
+router.patch('/research/:id_research', updateResearch);
+router.delete('/research/:id_research', deleteResearch);
 
 // PKM
 // router.post('/pkm', createPKM);
