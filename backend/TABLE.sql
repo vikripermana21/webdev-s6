@@ -75,9 +75,13 @@ ALTER TABLE education_history DROP CONSTRAINT IF EXISTS education_history_id_dos
 ALTER TABLE research DROP CONSTRAINT IF EXISTS research_id_dosen_fk;
 ALTER TABLE pkm DROP CONSTRAINT IF EXISTS pkm_id_dosen_fk;
 ALTER TABLE user_account DROP CONSTRAINT IF EXISTS user_account_id_dosen_fk;
+
+--Update database
 ALTER TABLE research ALTER COLUMN research_title TYPE VARCHAR(250);
 ALTER TABLE pkm ADD COLUMN pkm_link TEXT;
-
+ALTER TABLE profile_dosen ADD COLUMN major VARCHAR(100);
+ALTER TABLE profile_dosen ADD COLUMN study_program VARCHAR(100);
+ALTER TABLE profile_dosen ADD COLUMN position VARCHAR(100);
 
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
