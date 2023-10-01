@@ -2,8 +2,8 @@ import PKM from '../models/PKMModel.js';
 
 export const createPKM= async (req, res) => {
     try {
-        const PKM = await PKM.create(req.body);
-        res.status(201).json({ msg: "PKM Created", data: PKM });
+        const pkm = await PKM.create(req.body);
+        res.status(201).json({ msg: "PKM Created", data: pkm });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: 'Terjadi kesalahan dalam menginput data PKM.' });
