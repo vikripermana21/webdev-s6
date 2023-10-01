@@ -47,6 +47,18 @@ const ProfileDosen = db.define('profile_dosen', {
             key: 'id_user_account', // Reference the id_person field in DataDiri
         },
     },
+    major:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    position:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    study_program:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     tableName: 'profile_dosen',
     timestamps: false,

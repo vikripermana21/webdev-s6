@@ -1,7 +1,7 @@
 import express from "express";
 import { createAccount, getAllAccounts, getAccountById, login } from "../controllers/UserAccController.js";
 import { getAllLecturers, createLecturer, getLecturerById, updateLecturer, deleteLecturer } from "../controllers/ProfileController.js";
-// import { createTeachingHistory, showAllTeachingHistory, getTeachingHistoryById, updateTeachingHistory, deleteTeachingHistory } from "../controllers/TeachingHistoryController.js";
+import { createTeachingHistory, showAllTeachingHistory, getTeachingHistoryById, updateTeachingHistory, deleteTeachingHistory } from "../controllers/TeachHistoryController.js";
 import { createEducationHistory, showAllEducationHistory, getEducationHistoryById, updateEducationHistory, deleteEducationHistory } from "../controllers/EduHistoryController.js";
 import { createResearch, showAllResearch, getResearchById, updateResearch, deleteResearch } from "../controllers/ResearchController.js";
 // import { createPKM, showAllPKM, getPKMById, updatePKM, deletePKM } from "../controllers/PKMController.js";
@@ -26,11 +26,11 @@ router.patch("/lecturer/:id_dosen", updateLecturer);
 router.delete("/lecturer/:id_dosen", deleteLecturer);
 
 // Teaching History
-// router.post('/teaching-history', createTeachingHistory);
-// router.get('/teaching-history/:id_dosen', showAllTeachingHistory);
-// router.get('/teaching-history/:id_dosen/:id_teaching_history', getTeachingHistoryById);
-// router.patch('/teaching-history/:id_teaching_history', updateTeachingHistory);
-// router.delete('/teaching-history/:id_teaching_history', deleteTeachingHistory);
+router.post('/teaching-history', createTeachingHistory);
+router.get('/teaching-history/:id_dosen', showAllTeachingHistory);
+router.get('/teaching-history/:id_dosen/:id_teaching_history', getTeachingHistoryById);
+router.patch('/teaching-history/:id_teaching_history', updateTeachingHistory);
+router.delete('/teaching-history/:id_teaching_history', deleteTeachingHistory);
 
 // Education History
 router.post('/education-history', createEducationHistory);

@@ -29,7 +29,10 @@ export const createLecturer = async (req, res) => {
             gender: req.body.gender,
             email: req.body.email,
             bio: req.body.bio,
-            id_user_account: req.body.id_user_account
+            id_user_account: req.body.id_user_account,
+            major: req.body.major,
+            position: req.body.position,
+            study_program: req.body.study_program
           });
         res.status(201).json({ msg: "Lecturer Created", data: lecturer });
     } catch (error) {
