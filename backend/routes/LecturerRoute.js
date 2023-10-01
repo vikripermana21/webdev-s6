@@ -4,7 +4,7 @@ import { getAllLecturers, createLecturer, getLecturerById, updateLecturer, delet
 import { createTeachingHistory, showAllTeachingHistory, getTeachingHistoryById, updateTeachingHistory, deleteTeachingHistory } from "../controllers/TeachHistoryController.js";
 import { createEducationHistory, showAllEducationHistory, getEducationHistoryById, updateEducationHistory, deleteEducationHistory } from "../controllers/EduHistoryController.js";
 import { createResearch, showAllResearch, getResearchById, updateResearch, deleteResearch } from "../controllers/ResearchController.js";
-// import { createPKM, showAllPKM, getPKMById, updatePKM, deletePKM } from "../controllers/PKMController.js";
+import { createPKM, showAllPKM, getPKMById, updatePKM, deletePKM } from "../controllers/PkmController.js";
 
 const router = express.Router();
 
@@ -47,10 +47,10 @@ router.patch('/research/:id_research', updateResearch);
 router.delete('/research/:id_research', deleteResearch);
 
 // PKM
-// router.post('/pkm', createPKM);
-// router.get('/pkm/:id_dosen', showAllPKM);
-// router.get('/pkm/:id_dosen/:id_pkm', getPKMById);
-// router.patch('/pkm/:id_pkm', updatePKM);
-// router.delete('/pkm/:id_pkm', deletePKM);
+router.post('/pkm', createPKM);
+router.get('/pkm/:id_dosen', showAllPKM);
+router.get('/pkm/:id_dosen/:id_pkm', getPKMById);
+router.patch('/pkm/:id_pkm', updatePKM);
+router.delete('/pkm/:id_pkm', deletePKM);
 
 export default router;
