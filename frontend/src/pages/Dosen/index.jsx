@@ -36,13 +36,15 @@ const Dosen = () => {
         <div className="grid grid-cols-3">
           {data.map((item) => (
             <div className="card w-96 bg-base-100 shadow-xl mt-3 ml-3">
-              {/* <figure>
+              {
+                <figure>
                 <img
-                  src="/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+                  src={item.profile_picture} // Assuming item.profile_picture contains the image URL
                   alt="Shoes"
                   className="rounded-full"
                 />
-              </figure> */}
+              </figure>
+               }
               <div className="card-body">
                 <p className="text-lg font-bold">{item.full_name}</p>
                 <p>{item.major}</p>
