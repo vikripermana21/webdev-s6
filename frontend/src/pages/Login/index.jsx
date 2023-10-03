@@ -22,9 +22,17 @@ const Login = () => {
         password: password,
       }),
     })
-      .then((response) => {
-        console.log(response);
-        navigate("/dashboard");
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.infoAkun.role === "Admin") {
+          localStorage.setItem("userRole", "Admin");
+          navigate("/dashboard/admin");
+        } else if (data.infoAkun.role === "Dosen") {
+          localStorage.setItem("userRole", "Dosen");
+          navigate("/dashboard/dosen");
+        } else {
+          console.log("Peran pengguna tidak valid:", data.role); // Tambahkan ini
+        }
       })
       .catch((err) => {
         console.log(err);

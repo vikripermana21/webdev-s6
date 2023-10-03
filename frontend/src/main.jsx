@@ -5,9 +5,10 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login/index.jsx";
 import Register from "./pages/Register/index.jsx";
-import Dashboard from "./pages/Dashboard/index.jsx";
 import Dosen from "./pages/Dosen/index.jsx";
 import DetailDosen from "./pages/Dosen/detail.jsx";
+import DashboardAdmin from "./pages/Dashboard/admin.jsx";
+import DashboardDosen from "./pages/Dashboard/dosen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
     element: <DetailDosen />,
   },
   {
-    path: "/dashboard",
-    element: <Dashboard />,
+    path: "/dashboard/admin",
+    element: <DashboardAdmin />,
+  },
+  {
+    path: "/dashboard/dosen",
+    element: <DashboardDosen />,
   },
 ]);
 
