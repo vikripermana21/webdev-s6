@@ -22,9 +22,17 @@ const Login = () => {
         password: password,
       }),
     })
-      .then((response) => {
-        console.log(response);
-        navigate("/dashboard");
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.infoAkun.role === "Admin") {
+          localStorage.setItem("userRole", "Admin");
+          navigate("/dashboard/admin");
+        } else if (data.infoAkun.role === "Dosen") {
+          localStorage.setItem("userRole", "Dosen");
+          navigate("/dashboard/dosen");
+        } else {
+          console.log("Peran pengguna tidak valid:", data.role); // Tambahkan ini
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -36,12 +44,14 @@ const Login = () => {
       <div className="h-full flex justify-center items-center">
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
+            <div className="card-title">Login</div>
+
             <div className="flex flex-col items-start">
               <label htmlFor="nip">NIP</label>
               <input
                 id="nip"
                 type="text"
-                placeholder="Inset NIP"
+                placeholder="Insert NIP"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setNip(e.target.value)}
               />

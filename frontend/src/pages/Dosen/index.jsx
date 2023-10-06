@@ -38,13 +38,13 @@ const Dosen = () => {
             <div className="card w-96 bg-base-100 shadow-xl mt-3 ml-3">
               {
                 <figure>
-                <img
-                  src={item.profile_picture} // Assuming item.profile_picture contains the image URL
-                  alt="Shoes"
-                  className="rounded-full"
-                />
-              </figure>
-               }
+                  <img
+                    src={item.profile_picture} // Assuming item.profile_picture contains the image URL
+                    alt="Shoes"
+                    className="rounded-full"
+                  />
+                </figure>
+              }
               <div className="card-body">
                 <p className="text-lg font-bold">{item.full_name}</p>
                 <p>{item.major}</p>
