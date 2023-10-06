@@ -57,11 +57,7 @@ const AddDosen = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Save image to local storage
-        const imagePath = `./storage/images/${file.name}`;
-        localStorage.setItem('profilePicture', reader.result);
-        // Update state with image path
-        setProfilePicture(imagePath);
+        setProfilePicture(reader.result); // Set base64 encoded image data to state
       };
       reader.readAsDataURL(file);
     }

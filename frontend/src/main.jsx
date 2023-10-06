@@ -9,6 +9,7 @@ import Dosen from "./pages/Dosen/index.jsx";
 import DetailDosen from "./pages/Dosen/detail.jsx";
 import DashboardAdmin from "./pages/Dashboard/admin.jsx";
 import DashboardDosen from "./pages/Dashboard/dosen.jsx";
+import AddDosen from "./pages/Dosen/addDosen.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
     path: "/dashboard/dosen",
     element: <DashboardDosen />,
   },
+  {
+    path: "/dosen/addDosen",
+    element: <AddDosen />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
