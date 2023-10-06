@@ -1,7 +1,5 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
-import bgPage from "./assets/bg-landingpage.jpg";
-
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { Link } from "react-router-dom";
@@ -17,7 +15,8 @@ function App() {
       <div
         className="hero min-h-screen"
         style={{
-          backgroundImage: bgPage,
+          backgroundImage:
+            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
         }}
       >
         <div className="hero-overlay bg-opacity-60"></div>

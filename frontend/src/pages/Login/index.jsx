@@ -44,12 +44,14 @@ const Login = () => {
       <div className="h-full flex justify-center items-center">
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
+            <div className="card-title">Login</div>
+
             <div className="flex flex-col items-start">
               <label htmlFor="nip">NIP</label>
               <input
                 id="nip"
                 type="text"
-                placeholder="Inset NIP"
+                placeholder="Insert NIP"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setNip(e.target.value)}
               />

@@ -83,6 +83,10 @@ ALTER TABLE profile_dosen ADD COLUMN major VARCHAR(100);
 ALTER TABLE profile_dosen ADD COLUMN study_program VARCHAR(100);
 ALTER TABLE profile_dosen ADD COLUMN position VARCHAR(100);
 
+--Update tipe data table pkm
+ALTER TABLE pkm ALTER COLUMN pkm_title TYPE VARCHAR(150);
+ALTER TABLE pkm ALTER COLUMN partner_name TYPE VARCHAR(150);
+
 DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 

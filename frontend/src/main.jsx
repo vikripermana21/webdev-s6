@@ -39,10 +39,6 @@ const router = createBrowserRouter([
     path: "/dashboard/dosen",
     element: <DashboardDosen />,
   },
-  {
-    path: "/dosen/addDosen",
-    element: <AddDosen />,
-  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
