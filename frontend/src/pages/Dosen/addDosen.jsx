@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Topbar from "../../components/topbar";
 import { Link, useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-
 
 const AddDosen = () => {
   let navigate = useNavigate();
@@ -13,6 +11,11 @@ const AddDosen = () => {
   const [email, setEmail] = useState("");
   const [nip, setNip] = useState("");
   const [password, setPassword] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [bio, setBio] = useState("");
+  const [major, setMajor] = useState("");
+  const [position, setPosition] = useState("");
+  const [studyProgram, setStudyProgram] = useState("");
 
   const submitAddDosen = () => {
     fetch("http://localhost:5000/lecturer", {
@@ -29,15 +32,39 @@ const AddDosen = () => {
         email: email,
         nip: nip,
         password: password,
+        profile_picture: profilePicture,
+        bio: bio,
+        major: major,
+        position: position,
+        study_program: studyProgram,
       }),
     })
       .then((response) => {
-        console.log(response);
-        navigate("/");
+        if (response.ok) {
+          console.log("Dosen added successfully!");
+          navigate("/");
+        } else {
+          console.error("Error adding Dosen");
+        }
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Error:", err);
       });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Save image to local storage
+        const imagePath = `./storage/images/${file.name}`;
+        localStorage.setItem('profilePicture', reader.result);
+        // Update state with image path
+        setProfilePicture(imagePath);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -53,6 +80,56 @@ const AddDosen = () => {
                 placeholder="Insert Full Name"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="profilePicture">Profile Picture</label>
+              <input
+                id="profilePicture"
+                type="file"
+              onChange={handleFileChange}
+              />
+              {profilePicture && (
+                <img src={profilePicture} alt="Profile" style={{ maxWidth: '100px', marginTop: '10px' }} />
+              )}
+            </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                id="bio"
+                placeholder="Insert Bio"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => setBio(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="major">Major</label>
+              <input
+                id="major"
+                type="text"
+                placeholder="Insert Major"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => setMajor(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="position">Position</label>
+              <input
+                id="position"
+                type="text"
+                placeholder="Insert Position"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => setPosition(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label htmlFor="studyProgram">Study Program</label>
+              <input
+                id="studyProgram"
+                type="text"
+                placeholder="Insert Study Program"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => setStudyProgram(e.target.value)}
               />
             </div>
             <div className="flex flex-col items-start">
