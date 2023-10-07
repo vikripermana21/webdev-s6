@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Topbar = () => {
+const Topbar = ({ contentType }) => {
   return (
     <div className="navbar bg-base-100 absolute top-0 w-full">
       <div className="navbar-start">
@@ -36,16 +36,26 @@ const Topbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to={"/dosen"} className="text-black">
-              Dosen
-            </Link>
+            {contentType === "admin" ? (
+              <Link className="display-none" />
+            ) : (
+              <Link to={"/dosen"} className="text-black">
+                Dosen
+              </Link>
+            )}
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn" to={"/login"}>
-          Sign in
-        </Link>
+        {contentType === "admin" ? (
+          <Link className="btn" to={"/logout"}>
+            Logout
+          </Link>
+        ) : (
+          <Link className="btn" to={"/login"}>
+            Sign in
+          </Link>
+        )}
       </div>
     </div>
   );

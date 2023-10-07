@@ -29,10 +29,12 @@ const Dosen = () => {
       });
   };
   return (
-    <div className="h-screen w-full">
+    <div className="h-screen w-screen">
       <Topbar />
       <div className="mt-20">
-        <h1>Staf Dosen</h1>
+        <div className="flex justify-center items-center">
+          <h1>Staf Dosen</h1>
+        </div>
         <div className="grid grid-cols-3">
           {data.map((item) => (
             <div className="card w-96 bg-base-100 shadow-xl mt-3 ml-3">
@@ -41,7 +43,7 @@ const Dosen = () => {
                   <img
                     src={item.profile_picture} // Assuming item.profile_picture contains the image URL
                     alt="Shoes"
-                    className="rounded-full"
+                    className="rounded-full h-44 w-44"
                   />
                 </figure>
               }

@@ -18,9 +18,6 @@ const DetailDosen = () => {
     setShowMore(!showMore);
   };
 
-  const img =
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80";
-
   useEffect(() => {
     getListDosen();
     getListEducationHistory();
@@ -28,21 +25,6 @@ const DetailDosen = () => {
     getListResearch();
     getListPKM();
   }, []);
-
-  const pkmTemp = [
-    {
-      pkm_title: "Ini PKM Title 1",
-      pkm_year: "2023",
-      partner_name: "Abdul Somad",
-      description: "Ini deskripsi 1",
-    },
-    {
-      pkm_title: "Ini PKM Title 1",
-      pkm_year: "2023",
-      partner_name: "Abdul Somad",
-      description: "Ini deskripsi 1",
-    },
-  ];
 
   const getListDosen = () => {
     fetch(`http://localhost:5000/lecturer/${dosenId}`, {
@@ -147,10 +129,10 @@ const DetailDosen = () => {
   return (
     <div>
       <Topbar />
-      <div className="mt-14 h-screen flex">
-        <div className="w-3/6 min-w-[635px] flex flex-col gap-3 items-center p-5">
+      <div className="mt-14 w-screen h-screen flex">
+        <div className="w-3/6 flex flex-col gap-3 items-center p-5">
           <div className="w-full rounded-md flex items-start p-6 border h-max ">
-            <div className=" mr-5">
+            <div className="mr-5">
               <img
                 src={dosen.profile_picture}
                 alt=""
@@ -164,7 +146,7 @@ const DetailDosen = () => {
             </div>
           </div>
           <div className="w-full rounded-md flex flex-col gap-10 items-start p-6 border h-max ">
-            <div className="p-5 flex flex-col ">
+            <div className="p-5 flex flex-col w-full">
               <div className="flex items-start">
                 <button
                   onClick={() => setToggle(false)}
@@ -208,7 +190,7 @@ const DetailDosen = () => {
                   <div className="flex flex-col gap-4">
                     {pkm.map((item) => (
                       <div className="flex flex-col items-start">
-                        <p className="text-lg font-bold items-start">
+                        <p className="text-left text-lg font-bold items-start">
                           {item.pkm_title}
                         </p>
                         <p className="">{item.pkm_year}</p>
@@ -233,7 +215,7 @@ const DetailDosen = () => {
           </div>
         </div>
 
-        <div className="w-3/6 min-w-[635px] flex flex-col gap-3 items-start p-5">
+        <div className="w-3/6 flex flex-col gap-3 items-start p-5">
           <div className="w-full rounded-md flex flex-col items-start border relative">
             <h4 className="flex w-full text-lg font-bold p-5 rounded-none rounded-t-md bg-indigo-50">
               Bio
