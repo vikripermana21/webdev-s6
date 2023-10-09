@@ -3,10 +3,12 @@ import Topbar from "../../components/topbar";
 import { useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlinePlus } from "react-icons/ai";
+import moment from "moment";
 
 const DashboardDosen = () => {
-  const { dosenId } = useParams();
-
+  const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
+  console.log(dataAkun);
   const [dosen, setDosen] = useState({});
   const [eduHis, setEduHis] = useState([]);
   const [teachHis, setTeachHis] = useState([]);
@@ -16,6 +18,21 @@ const DashboardDosen = () => {
   const [selectedPKM, setSelectedPKM] = useState(null);
   // State untuk mengontrol modal tambah data research
   const [showAddResearchModal, setShowAddResearchModal] = useState(false);
+
+  // State untuk menyimpan data baru yang akan ditambahkan
+  const [newResearch, setNewResearch] = useState({
+    research_title: "",
+    publication_date: "",
+    doi_link: "",
+    id_dosen: "",
+  });
+
+  const [newPKM, setNewPKM] = useState({
+    pkm_title: "",
+    pkm_year: "",
+    partner_name: "",
+    description: "",
+  });
 
   // State untuk mengontrol modal tambah data PKM
   const [showAddPKMModal, setShowAddPKMModal] = useState(false);
@@ -40,37 +57,10 @@ const DashboardDosen = () => {
     getTeachingHistory();
     getListResearch();
     getListPKM();
-    handleDeleteResearch();
-    handleDeletePKM();
-    // getIdDosen;
   }, []);
 
-  // const getIdDosen = () => {
-  //   fetch(`http://localhost:5000/login`)
-  //     .then((response) => {
-  //       return response.json();
-  //       console.log(response);
-  //     })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Gagal login");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       // Simpan data infoAkun dari respons ke dalam variabel infoAkunData
-  //       infoAkunData = data.infoAkun.id_user_account;
-
-  //       // Sekarang Anda dapat mengakses infoAkunData di dalam FE
-  //       console.log(infoAkunData);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const getListDosen = () => {
-    fetch(`http://localhost:5000/lecturer/3`, {
+    fetch(`http://localhost:5000/lecturer/${dataAkun.id_user_account}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -90,13 +80,16 @@ const DashboardDosen = () => {
   };
 
   const getListEducationHistory = () => {
-    fetch(`http://localhost:5000/education-history/3`, {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://localhost:5000/education-history/${dataAkun.id_user_account}`,
+      {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => {
         return response.json();
       })
@@ -110,13 +103,16 @@ const DashboardDosen = () => {
   };
 
   const getTeachingHistory = () => {
-    fetch(`http://localhost:5000/teaching-history/3`, {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `http://localhost:5000/teaching-history/${dataAkun.id_user_account}`,
+      {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => {
         return response.json();
       })
@@ -130,7 +126,7 @@ const DashboardDosen = () => {
   };
 
   const getListResearch = () => {
-    fetch(`http://localhost:5000/research/1`, {
+    fetch(`http://localhost:5000/research/${dataAkun.id_user_account}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -150,7 +146,7 @@ const DashboardDosen = () => {
   };
 
   const getListPKM = () => {
-    fetch(`http://localhost:5000/pkm/1`, {
+    fetch(`http://localhost:5000/pkm/${dataAkun.id_user_account}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -220,7 +216,12 @@ const DashboardDosen = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(selectedResearch), // Mengirim data research yang diperbarui
+        body: JSON.stringify({
+          ...selectedResearch,
+          publication_date: moment(selectedResearch.publication_date).format(
+            "YYYY-MM-DD"
+          ),
+        }), // Mengirim data research baru
       })
         .then((response) => {
           if (!response.ok) {
@@ -245,7 +246,10 @@ const DashboardDosen = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(selectedPKM), // Mengirim data PKM yang diperbarui
+        body: JSON.stringify({
+          ...selectedPKM,
+          pkm_year: moment(selectedPKM.pkm_year).format("YYYY-MM-DD"),
+        }), // Mengirim data research baru
       })
         .then((response) => {
           if (!response.ok) {
@@ -276,21 +280,6 @@ const DashboardDosen = () => {
   let rowNum = 1;
   let rowNum2 = 1;
 
-  // State untuk menyimpan data baru yang akan ditambahkan
-  const [newResearch, setNewResearch] = useState({
-    research_title: "",
-    publication_date: "",
-    doi_link: "",
-    id_dosen: "",
-  });
-
-  const [newPKM, setNewPKM] = useState({
-    pkm_title: "",
-    pkm_year: "",
-    partner_name: "",
-    description: "",
-  });
-
   // Fungsi untuk menambahkan data research baru
   const handleAddResearch = () => {
     // Lakukan permintaan fetch untuk menambahkan data research baru ke server
@@ -300,7 +289,13 @@ const DashboardDosen = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newResearch), // Mengirim data research baru
+      body: JSON.stringify({
+        ...newResearch,
+        id_dosen: dataAkun.id_user_account,
+        publication_date: moment(newResearch.publication_date).format(
+          "YYYY-MM-DD"
+        ),
+      }), // Mengirim data research baru
     })
       .then((response) => {
         if (!response.ok) {
@@ -328,7 +323,11 @@ const DashboardDosen = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPKM), // Mengirim data PKM baru
+      body: JSON.stringify({
+        ...newPKM,
+        id_dosen: dataAkun.id_user_account,
+        pkm_year: moment(newPKM.pkm_year).format("YYYY-MM-DD"),
+      }), // Mengirim data PKM baru
     })
       .then((response) => {
         if (!response.ok) {
@@ -360,15 +359,16 @@ const DashboardDosen = () => {
 
         <div className="w-4/6 flex flex-col gap-3 items-start p-5">
           <div className="w-full rounded-md flex flex-col items-start border relative">
-            <h4 className="flex w-full text-lg font-bold p-5">Research</h4>
-            {/* Tombol "Add Data" untuk menambahkan data research baru */}
-            <button
-              className="btn-primary hover:bg-primary-900 text-white font-bold rounded m-2"
-              onClick={() => setShowAddResearchModal(true)}
-            >
-              Add Data
-            </button>
-            <div className="p-5">
+            <div className="flex w-full justify-between items-center">
+              <h4 className="flex text-lg font-bold p-5">Research</h4>
+              <button
+                className="btn-sm btn-primary hover:bg-primary-900 text-white font-bold rounded m-2"
+                onClick={() => setShowAddResearchModal(true)}
+              >
+                <AiOutlinePlus />
+              </button>
+            </div>
+            <div className="p-5 w-full">
               <div className="overflow-x-auto">
                 <table className="table table-zebra">
                   {/* head */}
@@ -415,8 +415,17 @@ const DashboardDosen = () => {
             </div>
           </div>
           <div className="w-full rounded-md flex flex-col items-start border relative">
-            <h4 className="flex w-full text-lg font-bold p-5">PKM</h4>
-            <div className="p-5">
+            <div className="flex w-full justify-between items-center">
+              <h4 className="flex w-full text-lg font-bold p-5">PKM</h4>
+              {/* Tombol "Add Data" untuk menambahkan data pkm baru */}
+              <button
+                className="btn-sm btn-primary hover:bg-primary-900 text-white font-bold rounded m-2"
+                onClick={() => setShowAddPKMModal(true)}
+              >
+                <AiOutlinePlus />
+              </button>
+            </div>
+            <div className="w-full p-5">
               <div className="overflow-x-auto">
                 <table className="table table-zebra">
                   <thead>
@@ -489,7 +498,7 @@ const DashboardDosen = () => {
             <div className="form-control w-full">
               <label className="label">Publication Date</label>
               <input
-                type="text"
+                type="date"
                 placeholder="Type here"
                 className="input input-bordered w-full"
                 value={selectedResearch.publication_date}
@@ -561,7 +570,7 @@ const DashboardDosen = () => {
             <div className="form-control w-full">
               <label className="label">Publication Date</label>
               <input
-                type="text"
+                type="date"
                 placeholder="Type here"
                 className="input input-bordered w-full"
                 value={newResearch.publication_date}
@@ -603,6 +612,87 @@ const DashboardDosen = () => {
         </div>
       )}
 
+      {/* Modal untuk menambahkan data PKM */}
+      {showAddPKMModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg pb-5">Add Data PKM</h3>
+            <div className="form-control w-full">
+              <label className="label">PKM Title</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newPKM.pkm_title}
+                onChange={(e) =>
+                  setNewPKM({
+                    ...newPKM,
+                    pkm_title: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">PKM Year</label>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newPKM.pkm_year}
+                onChange={(e) =>
+                  setNewPKM({
+                    ...newPKM,
+                    pkm_year: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">Partner Name</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newPKM.partner_name}
+                onChange={(e) =>
+                  setNewPKM({
+                    ...newPKM,
+                    partner_name: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">Description</label>
+              <textarea
+                rows="5"
+                type="text"
+                placeholder="Type here"
+                className="p-2.5 input input-bordered w-full"
+                value={newPKM.description}
+                onChange={(e) =>
+                  setNewPKM({
+                    ...newPKM,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="modal-action">
+              <button
+                className="btn mr-2"
+                onClick={() => setShowAddPKMModal(false)}
+              >
+                Close
+              </button>
+              <button className="btn btn-primary" onClick={handleAddPKM}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modal untuk update data PKM */}
       {selectedPKM && (
         <dialog id="my_modal_2" className="modal">
@@ -627,7 +717,7 @@ const DashboardDosen = () => {
             <div className="form-control w-full">
               <label className="label">PKM Year</label>
               <input
-                type="text"
+                type="date"
                 placeholder="Type here"
                 className="input input-bordered w-full"
                 value={selectedPKM.pkm_year}

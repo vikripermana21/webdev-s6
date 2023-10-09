@@ -24,6 +24,7 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        localStorage.setItem("infoAkun", JSON.stringify(data.infoAkun));
         if (data.infoAkun.role === "Admin") {
           localStorage.setItem("userRole", "Admin");
           navigate("/dashboard/admin");
