@@ -145,7 +145,7 @@ const UpdateDataEducation = () => {
     <div className="h-screen w-screen flex">
       <Topbar contentType="admin" />
       <div className="w-1/4 flex flex-col gap-3 items-center">
-        <SideBar />
+        <SideBar contentType="admin" />
       </div>
       <div className="w-3/4 flex flex-col gap-3 items-center p-5">
         <div className="mt-16 w-full">

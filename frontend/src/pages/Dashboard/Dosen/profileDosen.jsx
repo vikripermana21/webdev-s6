@@ -2,13 +2,12 @@ import React from "react";
 import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
 
-const UpdateDataDosen = () => {
-  // console.log(props);
+const ProfileDosen = () => {
   return (
     <div className="h-screen w-screen flex">
-      <Topbar contentType="admin" />
+      <Topbar contentType="dosen" />
       <div className="w-1/4 flex flex-col gap-3 items-center">
-        <SideBar contentType="admin" />
+        <SideBar />
       </div>
       <div className="w-3/4 flex flex-col gap-3 items-center p-5">
         <div className="mt-16">
@@ -21,4 +20,4 @@ const UpdateDataDosen = () => {
   );
 };
 
-export default UpdateDataDosen;
+export default ProfileDosen;

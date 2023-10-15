@@ -12,6 +12,11 @@ import DashboardDosen from "./pages/Dashboard/dosen.jsx";
 import UpdateDataDosen from "./pages/Dashboard/Admin/updateDosen.jsx";
 import UpdateDataEducation from "./pages/Dashboard/Admin/updateEduHistory.jsx";
 import UpdateDataTeach from "./pages/Dashboard/Admin/updateTeachHistory.jsx";
+import ProfileDosen from "./pages/Dashboard/Dosen/profileDosen.jsx";
+import EducationHisDosen from "./pages/Dashboard/Dosen/eduHisDosen.jsx";
+import TeachingHisDosen from "./pages/Dashboard/Dosen/teachHisDosen.jsx";
+import UpdatePKM from "./pages/Dashboard/Dosen/updatePKM.jsx";
+import UpdateResearch from "./pages/Dashboard/Dosen/updateResearch.jsx";
 // import DashboardDosen from "./pages/Dashboard/Dosen/dosen.jsx";
 // import DashboardDosenResearch from "./pages/Dashboard/Dosen/crudResearch.jsx";
 // import DashboardDosenPKM from "./pages/Dashboard/Dosen/crudPKM.jsx";
@@ -46,6 +51,26 @@ const router = createBrowserRouter([
     element: <DashboardDosen />,
   },
   {
+    path: "/dashboard/profiledosen",
+    element: <ProfileDosen />,
+  },
+  {
+    path: "/dashboard/eduhisdosen",
+    element: <EducationHisDosen />,
+  },
+  {
+    path: "/dashboard/teachhisdosen",
+    element: <TeachingHisDosen />,
+  },
+  {
+    path: "/dashboard/updatepkm",
+    element: <UpdatePKM />,
+  },
+  {
+    path: "/dashboard/updateresearch",
+    element: <UpdateResearch />,
+  },
+  {
     path: "/updatedosen/:dosenId",
     element: <UpdateDataDosen />,
   },
@@ -57,14 +82,6 @@ const router = createBrowserRouter([
     path: "/updateteachhistory/:dosenId",
     element: <UpdateDataTeach />,
   },
-  // {
-  //   path: "/dashboard/dosen/research",
-  //   element: <DashboardDosenResearch />,
-  // },
-  // {
-  //   path: "/dashboard/dosen/pkm",
-  //   element: <DashboardDosenPKM />,
-  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
