@@ -7,8 +7,14 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 const DashboardAdmin = () => {
   const navigate = useNavigate();
   const [dosen, setDosen] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false); // Untuk mengelola status modal
+  const [newDosenData, setNewDosenData] = useState({ nip: "", password: "" }); // State input
 
   useEffect(() => {
+    getListDosen();
+  }, []); // Efek ini hanya berjalan sekali saat komponen dimuat
+
+  const getListDosen = () => {
     // Mengambil data akun dosen dari endpoint /lecturer
     fetch("http://localhost:5000/lecturer")
       .then((response) => response.json())
@@ -35,7 +41,35 @@ const DashboardAdmin = () => {
           .catch((error) => console.error("Error:", error));
       })
       .catch((error) => console.error("Error:", error));
-  }, []); // Efek ini hanya berjalan sekali saat komponen dimuat
+  };
+
+  const handleAddDosen = () => {
+    // Lakukan permintaan fetch untuk menambahkan data PKM baru ke server
+    fetch(`http://localhost:5000/account`, {
+      method: "POST", // Menggunakan metode POST untuk menambahkan data
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...newDosenData,
+      }), // Mengirim data baru
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Gagal menambahkan data dosen");
+        }
+        // Jika berhasil ditambahkan, perbarui data dosen yang ditampilkan
+        getListDosen();
+        setNewDosenData({
+          nip: "",
+          password: "",
+        }); // Kosongkan input setelah berhasil
+      })
+      .catch((err) => {
+        console.error("Gagal menambahkan data dosen:", err);
+      });
+  };
 
   return (
     <div className="h-screen w-screen flex">
@@ -48,7 +82,10 @@ const DashboardAdmin = () => {
           <div className="flex justify-center">
             <div className="overflow-x-auto">
               <div className="flex justify-end items-end m-3">
-                <button className="btn-sm pb-8 btn-primary hover:bg-primary-900 text-white font-bold">
+                <button
+                  className="btn-sm pb-8 btn-primary hover:bg-primary-900 text-white font-bold"
+                  onClick={() => setModalOpen(true)}
+                >
                   Add Dosen
                 </button>
               </div>
@@ -58,7 +95,7 @@ const DashboardAdmin = () => {
                   <tr>
                     <th>ID Dosen</th>
                     <th>NIP</th>
-                    <th>FullName</th>
+                    <th>Full Name</th>
                     <th>Major</th>
                     <th>Position</th>
                     <th>Action</th>
@@ -93,6 +130,58 @@ const DashboardAdmin = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal untuk menambahkan Dosen */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg pb-5">Add Dosen</h3>
+              <div className="form-control w-full">
+                <label className="label">NIP</label>
+                <input
+                  type="text"
+                  placeholder="NIP"
+                  className="input input-bordered w-full"
+                  value={newDosenData.nip}
+                  onChange={(e) =>
+                    setNewDosenData({ ...newDosenData, nip: e.target.value })
+                  }
+                />
+              </div>
+              <div className="form-control w-full">
+                <label className="label">Password</label>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="input input-bordered w-full"
+                  value={newDosenData.password}
+                  onChange={(e) =>
+                    setNewDosenData({
+                      ...newDosenData,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="modal-action">
+                <button
+                  className="btn mr-2"
+                  onClick={() => setModalOpen(false)} // Tutup modal
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAddDosen} // Tambahkan fungsi untuk menambah Dosen
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
