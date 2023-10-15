@@ -24,6 +24,7 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        localStorage.setItem("infoAkun", JSON.stringify(data.infoAkun));
         if (data.infoAkun.role === "Admin") {
           localStorage.setItem("userRole", "Admin");
           navigate("/dashboard/admin");
@@ -44,7 +45,9 @@ const Login = () => {
       <div className="h-full flex justify-center items-center">
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
-            <div className="card-title">Login</div>
+            <div className="card-title pb-5">
+              <p className="text-center text-2xl font-bold">Login</p>
+            </div>
 
             <div className="flex flex-col items-start">
               <label htmlFor="nip">NIP</label>
@@ -83,12 +86,6 @@ const Login = () => {
                 Sign in
               </button>
             </div>
-          </div>
-          <div className="card-footer">
-            <p className="text-sm">
-              Doens't have an account yet?{" "}
-              <Link to={"/register"}> Create an account </Link>
-            </p>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
-const Topbar = () => {
+const Topbar = ({ contentType }) => {
   return (
     <div className="navbar bg-base-100 absolute top-0 w-full">
       <div className="navbar-start">
@@ -31,21 +32,40 @@ const Topbar = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+        {contentType === "admin" ? (
+          <button
+            className="btn btn-ghost normal-case text-xl"
+            onClick={() => navigate(`/dashboard/admin`)}
+          >
+            <MdOutlineArrowBackIosNew />
+          </button>
+        ) : (
+          <a className="btn btn-ghost normal-case text-xl">PolbanEduStaff</a>
+        )}
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link to={"/dosen"} className="text-black">
-              Dosen
-            </Link>
+            {contentType === "dosen" || contentType === "admin" ? (
+              <Link className="display-none" />
+            ) : (
+              <Link to={"/dosen"} className="text-black">
+                Dosen
+              </Link>
+            )}
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn" to={"/login"}>
-          Sign in
-        </Link>
+        {contentType === "admin" || contentType === "dosen" ? (
+          <Link className="btn" to={"/"}>
+            Logout
+          </Link>
+        ) : (
+          <Link className="btn" to={"/login"}>
+            Sign in
+          </Link>
+        )}
       </div>
     </div>
   );

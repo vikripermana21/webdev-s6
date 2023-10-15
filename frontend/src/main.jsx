@@ -4,11 +4,18 @@ import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login/index.jsx";
-import Register from "./pages/Register/index.jsx";
 import Dosen from "./pages/Dosen/index.jsx";
 import DetailDosen from "./pages/Dosen/detail.jsx";
 import DashboardAdmin from "./pages/Dashboard/admin.jsx";
 import DashboardDosen from "./pages/Dashboard/dosen.jsx";
+import UpdateDataDosen from "./pages/Dashboard/Admin/updateDosen.jsx";
+import UpdateDataEducation from "./pages/Dashboard/Admin/updateEduHistory.jsx";
+import UpdateDataTeach from "./pages/Dashboard/Admin/updateTeachHistory.jsx";
+import ProfileDosen from "./pages/Dashboard/Dosen/profileDosen.jsx";
+import EducationHisDosen from "./pages/Dashboard/Dosen/eduHisDosen.jsx";
+import TeachingHisDosen from "./pages/Dashboard/Dosen/teachHisDosen.jsx";
+import UpdatePKM from "./pages/Dashboard/Dosen/updatePKM.jsx";
+import UpdateResearch from "./pages/Dashboard/Dosen/updateResearch.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,10 +25,6 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
   },
   {
     path: "/dosen",
@@ -38,6 +41,38 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/dosen",
     element: <DashboardDosen />,
+  },
+  {
+    path: "/dashboard/profiledosen",
+    element: <ProfileDosen />,
+  },
+  {
+    path: "/dashboard/eduhisdosen",
+    element: <EducationHisDosen />,
+  },
+  {
+    path: "/dashboard/teachhisdosen",
+    element: <TeachingHisDosen />,
+  },
+  {
+    path: "/dashboard/updatepkm",
+    element: <UpdatePKM />,
+  },
+  {
+    path: "/dashboard/updateresearch",
+    element: <UpdateResearch />,
+  },
+  {
+    path: "/updatedosen/:dosenId",
+    element: <UpdateDataDosen />,
+  },
+  {
+    path: "/updateeduhistory/:dosenId",
+    element: <UpdateDataEducation />,
+  },
+  {
+    path: "/updateteachhistory/:dosenId",
+    element: <UpdateDataTeach />,
   },
 ]);
 
