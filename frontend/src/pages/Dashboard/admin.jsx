@@ -15,27 +15,38 @@ const DashboardAdmin = () => {
   }, []); // Efek ini hanya berjalan sekali saat komponen dimuat
 
   const getListDosen = () => {
-    // Mengambil data akun dosen dari endpoint /lecturer
     fetch("http://localhost:5000/lecturer")
       .then((response) => response.json())
       .then((lecturerData) => {
-        // Mengambil data akun dari endpoint /accounts
         fetch("http://localhost:5000/accounts")
           .then((response) => response.json())
           .then((accountsData) => {
-            // Gabungkan data berdasarkan id_user_account
-            const mergedData = lecturerData.map((lecturer) => {
-              const account = accountsData.find(
-                (account) =>
-                  account.id_user_account === lecturer.id_user_account
-              );
-              return {
-                ...lecturer,
-                nip: account ? account.nip : "Tidak Ditemukan",
-              };
+            const lecturerMap = new Map(
+              lecturerData.map((lecturer) => [
+                lecturer.id_user_account,
+                lecturer,
+              ])
+            );
+
+            const mergedData = accountsData.map((account) => {
+              const lecturer = lecturerMap.get(account.id_user_account);
+              if (lecturer) {
+                return {
+                  ...lecturer,
+                  nip: account.nip,
+                };
+              } else {
+                // Jika akun tidak memiliki profil, tambahkan data minimal
+                return {
+                  id_user_account: account.id_user_account,
+                  nip: account.nip,
+                  full_name: "Not Found",
+                  major: "Not Found",
+                  position: "Not Found",
+                };
+              }
             });
-            // Urutkan data berdasarkan id_dosen sebelum disimpan dalam state
-            mergedData.sort((a, b) => a.id_dosen - b.id_dosen);
+
             setDosen(mergedData);
           })
           .catch((error) => console.error("Error:", error));
@@ -104,8 +115,8 @@ const DashboardAdmin = () => {
                 <tbody>
                   {/* Menampilkan data dosen */}
                   {dosen.map((d) => (
-                    <tr key={d.id_dosen}>
-                      <td>{d.id_dosen}</td>
+                    <tr key={d.id_user_account}>
+                      <td>{d.id_user_account}</td>
                       <td>{d.nip}</td>
                       <td>{d.full_name}</td>
                       <td>{d.major}</td>
@@ -114,7 +125,9 @@ const DashboardAdmin = () => {
                         {/* Tombol-tombol CRUD */}
                         <button
                           className="btn-primary hover:bg-primary-900 text-white font-bold py-2 px-4 mx-2 rounded"
-                          onClick={() => navigate(`/updatedosen/${d.id_dosen}`)}
+                          onClick={() =>
+                            navigate(`/updatedosen/${d.id_user_account}`)
+                          }
                         >
                           <FaRegEdit />
                         </button>
