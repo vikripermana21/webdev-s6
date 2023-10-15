@@ -9,25 +9,26 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 const UpdateDataTeach = () => {
   const { dosenId } = useParams();
-  const [education, setEducation] = useState([]);
-  const [selectedEducation, setSelectedEducation] = useState(null);
-  const [showAddEducationModal, setShowAddEducationModal] = useState(false);
+  const [teaching, setTeaching] = useState([]);
+  const [selectedTeaching, setSelectedTeaching] = useState(null);
+  const [showAddTeachingModal, setShowAddTeachingModal] = useState(false);
 
-  const [newEducation, setNewEducation] = useState({
+  const [newTeaching, setNewTeaching] = useState({
     institution: "",
-    degree: "",
-    graduation_date: "",
+    position: "",
+    start_date: "",
+    end_date: "",
     id_dosen: "",
   });
 
   useEffect(() => {
-    getListEducationHistory();
+    getListTeachingHistory();
   }, []);
 
   let rowNum = 1;
 
-  const getListEducationHistory = () => {
-    fetch(`http://localhost:5000/education-history/${dosenId}`, {
+  const getListTeachingHistory = () => {
+    fetch(`http://localhost:5000/teaching-history/${dosenId}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -38,7 +39,7 @@ const UpdateDataTeach = () => {
         return response.json();
       })
       .then((data) => {
-        setEducation(data);
+        setTeaching(data);
         console.log(data);
       })
       .catch((err) => {
@@ -46,16 +47,16 @@ const UpdateDataTeach = () => {
       });
   };
 
-  const showEducationModal = (educationData) => {
-    setSelectedEducation(educationData);
+  const showTeachingModal = (teachingData) => {
+    setSelectedTeaching(teachingData);
     document.getElementById("my_modal_1").showModal();
   };
 
-  const handleUpdateEducation = () => {
-    if (selectedEducation) {
+  const handleUpdateTeaching = () => {
+    if (selectedTeaching) {
       // Lakukan permintaan fetch untuk mengirim pembaruan data ke server
       fetch(
-        `http://localhost:5000/education-history/${selectedEducation.id_education_history}`,
+        `http://localhost:5000/teaching-history/${selectedTeaching.id_teaching_history}`,
         {
           method: "PATCH", // Menggunakan metode PATCH untuk pembaruan data
           headers: {
@@ -63,66 +64,67 @@ const UpdateDataTeach = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            institution: selectedEducation.institution,
-            graduation_date: moment(selectedEducation.graduation_date).format(
+            institution: selectedTeaching.institution,
+            position: selectedTeaching.position,
+            end_date: moment(selectedTeaching.end_date).format("YYYY-MM-DD"),
+            start_date: moment(selectedTeaching.start_date).format(
               "YYYY-MM-DD"
             ),
-            degree: selectedEducation.degree,
           }),
         }
       )
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Gagal mengupdate data graduation");
+            throw new Error("Gagal mengupdate data start dan end date");
           }
-          // Jika berhasil diupdate, perbarui data education yang ditampilkan
-          getListEducationHistory();
-          // Tutup modal setelah berhasil dan selectedEducation
+          // Jika berhasil diupdate, perbarui data teaching yang ditampilkan
+          getListTeachingHistory();
+          // Tutup modal setelah berhasil dan selectedTeaching
           document.getElementById("my_modal_1").close();
-          setSelectedEducation(null); // Ubah menjadi null setelah berhasil
+          setSelectedTeaching(null); // Ubah menjadi null setelah berhasil
         })
         .catch((err) => {
-          console.error("Gagal mengupdate data graduation:", err);
+          console.error("Gagal mengupdate data start dan end date:", err);
         });
     }
   };
 
-  const handleAddEducation = () => {
-    // Lakukan permintaan fetch untuk menambahkan data education baru ke server
-    fetch(`http://localhost:5000/education-history`, {
+  const handleAddTeaching = () => {
+    // Lakukan permintaan fetch untuk menambahkan data teaching baru ke server
+    fetch(`http://localhost:5000/teaching-history`, {
       method: "POST", // Menggunakan metode POST untuk menambahkan data
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        ...newEducation,
+        ...newTeaching,
         id_dosen: dosenId,
-        graduation_date: moment(newEducation.graduation_date).format(
-          "YYYY-MM-DD"
-        ),
-      }), // Mengirim data education baru
+        end_date: moment(newTeaching.end_date).format("YYYY-MM-DD"),
+        start_date: moment(newTeaching.start_date).format("YYYY-MM-DD"),
+      }), // Mengirim data teaching baru
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Gagal menambahkan data education");
+          throw new Error("Gagal menambahkan data teaching");
         }
-        // Jika berhasil ditambahkan, perbarui data education yang ditampilkan
-        getListEducationHistory();
-        setNewEducation({
+        // Jika berhasil ditambahkan, perbarui data teaching yang ditampilkan
+        getListTeachingHistory();
+        setNewTeaching({
           institution: "",
-          degree: "",
-          graduation_date: "",
+          position: "",
+          start_date: "",
+          end_date: "",
         }); // Kosongkan input setelah berhasil
       })
       .catch((err) => {
-        console.error("Gagal menambahkan data education:", err);
+        console.error("Gagal menambahkan data teaching:", err);
       });
   };
 
-  const handleDeleteEducation = (id_education_history) => {
-    // Lakukan permintaan fetch untuk menghapus data education dengan id_education_history tertentu
-    fetch(`http://localhost:5000/education-history/${id_education_history}`, {
+  const handleDeleteTeaching = (id_teaching_history) => {
+    // Lakukan permintaan fetch untuk menghapus data teaching dengan id_teaching_history tertentu
+    fetch(`http://localhost:5000/teaching-history/${id_teaching_history}`, {
       method: "DELETE", // Menggunakan metode DELETE untuk menghapus data
       headers: {
         Accept: "application/json",
@@ -131,13 +133,13 @@ const UpdateDataTeach = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Gagal menghapus data education");
+          throw new Error("Gagal menghapus data teaching");
         }
-        // Jika berhasil dihapus, perbarui data education yang ditampilkan
-        getListEducationHistory();
+        // Jika berhasil dihapus, perbarui data teaching yang ditampilkan
+        getListTeachingHistory();
       })
       .catch((err) => {
-        console.error("Gagal menghapus data education:", err);
+        console.error("Gagal menghapus data teaching:", err);
       });
   };
 
@@ -157,7 +159,7 @@ const UpdateDataTeach = () => {
                   <div className="card-actions justify-end">
                     <button
                       className="w-fit btn-sm btn-primary hover:bg-primary-900 text-white font-bold rounded pb-7"
-                      onClick={() => setShowAddEducationModal(true)}
+                      onClick={() => setShowAddTeachingModal(true)}
                     >
                       Add Data
                     </button>
@@ -171,32 +173,34 @@ const UpdateDataTeach = () => {
                           <tr>
                             <th>No</th>
                             <th>Institution</th>
-                            <th>Degree Date</th>
-                            <th>Graduation Date</th>
+                            <th>Position</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {/* Menampilkan data education */}
-                          {education.map((item) => (
-                            <tr key={item.id_education_history}>
+                          {/* Menampilkan data teaching */}
+                          {teaching.map((item) => (
+                            <tr key={item.id_teaching_history}>
                               <td>{rowNum++}</td>
                               <td>{item.institution}</td>
-                              <td>{item.degree}</td>
-                              <td>{item.graduation_date}</td>
+                              <td>{item.position}</td>
+                              <td>{item.start_date}</td>
+                              <td>{item.end_date}</td>
                               <td>
                                 <div className="flex">
                                   <button
                                     className="btn-primary hover:bg-primary-900 text-white font-bold rounded mr-2"
-                                    onClick={() => showEducationModal(item)}
+                                    onClick={() => showTeachingModal(item)}
                                   >
                                     <FaRegEdit />
                                   </button>
                                   <button
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold rounded"
                                     onClick={() => {
-                                      handleDeleteEducation(
-                                        item.id_education_history
+                                      handleDeleteTeaching(
+                                        item.id_teaching_history
                                       );
                                     }}
                                   >
@@ -217,52 +221,67 @@ const UpdateDataTeach = () => {
         </div>
       </div>
 
-      {/* Modal untuk update data Education */}
-      {selectedEducation && (
+      {/* Modal untuk update data teaching */}
+      {selectedTeaching && (
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg pb-5">Update data Education</h3>
+            <h3 className="font-bold text-lg pb-5">Update data Teaching</h3>
             <div className="form-control w-full">
               <label className="label">Institution</label>
               <input
                 type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={selectedEducation.institution}
+                value={selectedTeaching.institution}
                 onChange={(e) =>
-                  setSelectedEducation({
-                    ...selectedEducation,
+                  setSelectedTeaching({
+                    ...selectedTeaching,
                     institution: e.target.value,
                   })
                 }
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Graduation Date</label>
+              <label className="label">Position</label>
               <input
-                type="date"
+                type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={selectedEducation.graduation_date}
+                value={selectedTeaching.position}
                 onChange={(e) =>
-                  setSelectedEducation({
-                    ...selectedEducation,
-                    graduation_date: e.target.value,
+                  setSelectedTeaching({
+                    ...selectedTeaching,
+                    position: e.target.value,
                   })
                 }
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Degree</label>
+              <label className="label">Start Date</label>
               <input
-                type="text"
+                type="date"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={selectedEducation.degree}
+                value={selectedTeaching.start_date}
                 onChange={(e) =>
-                  setSelectedEducation({
-                    ...selectedEducation,
-                    degree: e.target.value,
+                  setSelectedTeaching({
+                    ...selectedTeaching,
+                    start_date: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">End Date</label>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={selectedTeaching.end_date}
+                onChange={(e) =>
+                  setSelectedTeaching({
+                    ...selectedTeaching,
+                    end_date: e.target.value,
                   })
                 }
               />
@@ -271,16 +290,16 @@ const UpdateDataTeach = () => {
               <button
                 className="btn mr-2"
                 onClick={() => {
-                  // Tutup modal dan selectedEducation saat tombol Close diklik
+                  // Tutup modal dan selectedTeaching saat tombol Close diklik
                   document.getElementById("my_modal_1").close();
-                  setSelectedEducation(null); // Ubah menjadi null
+                  setSelectedTeaching(null); // Ubah menjadi null
                 }}
               >
                 Close
               </button>
               <button
                 className="btn btn-primary"
-                onClick={handleUpdateEducation}
+                onClick={handleUpdateTeaching}
               >
                 Save
               </button>
@@ -289,52 +308,67 @@ const UpdateDataTeach = () => {
         </dialog>
       )}
 
-      {/* Modal untuk menambahkan data education */}
-      {showAddEducationModal && (
+      {/* Modal untuk menambahkan data teaching */}
+      {showAddTeachingModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="modal-box">
-            <h3 className="font-bold text-lg pb-5">Add Data Education</h3>
+            <h3 className="font-bold text-lg pb-5">Add Data Teaching</h3>
             <div className="form-control w-full">
               <label className="label">Institution</label>
               <input
                 type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={newEducation.institution}
+                value={newTeaching.institution}
                 onChange={(e) =>
-                  setNewEducation({
-                    ...newEducation,
+                  setNewTeaching({
+                    ...newTeaching,
                     institution: e.target.value,
                   })
                 }
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Graduation Date</label>
+              <label className="label">Position</label>
               <input
-                type="date"
+                type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={newEducation.graduation_date}
+                value={newTeaching.position}
                 onChange={(e) =>
-                  setNewEducation({
-                    ...newEducation,
-                    graduation_date: e.target.value,
+                  setNewTeaching({
+                    ...newTeaching,
+                    position: e.target.value,
                   })
                 }
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Degree</label>
+              <label className="label">Start Date</label>
               <input
-                type="text"
+                type="date"
                 placeholder="Type here"
                 className="input input-bordered w-full"
-                value={newEducation.degree}
+                value={newTeaching.start_date}
                 onChange={(e) =>
-                  setNewEducation({
-                    ...newEducation,
-                    degree: e.target.value,
+                  setNewTeaching({
+                    ...newTeaching,
+                    start_date: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">End Date</label>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newTeaching.end_date}
+                onChange={(e) =>
+                  setNewTeaching({
+                    ...newTeaching,
+                    end_date: e.target.value,
                   })
                 }
               />
@@ -342,11 +376,11 @@ const UpdateDataTeach = () => {
             <div className="modal-action">
               <button
                 className="btn mr-2"
-                onClick={() => setShowAddEducationModal(false)}
+                onClick={() => setShowAddTeachingModal(false)}
               >
                 Close
               </button>
-              <button className="btn btn-primary" onClick={handleAddEducation}>
+              <button className="btn btn-primary" onClick={handleAddTeaching}>
                 Save
               </button>
             </div>

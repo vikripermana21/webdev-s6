@@ -13,6 +13,16 @@ const DetailDosen = () => {
   const [toggle, setToggle] = useState(false);
   const [showMore, setShowMore] = useState(false);
 
+  const [selectedPKM, setSelectedPKM] = useState(null); // State untuk data PKM yang dipilih
+  const [isPKMModalOpen, setPKMModalOpen] = useState(false); // State untuk mengelola status modal PKM
+
+  const openPKMDetailModal = (pkmId) => {
+    // Temukan data PKM berdasarkan ID PKM
+    const selectedPKMData = pkm.find((item) => item.id_pkm === pkmId);
+    setSelectedPKM(selectedPKMData);
+    setPKMModalOpen(true); // Buka modal PKM
+  };
+
   const toggleShowMore = () => {
     setShowMore(!showMore);
   };
@@ -131,7 +141,7 @@ const DetailDosen = () => {
       <div className="mt-14 w-screen h-screen flex">
         <div className="w-3/6 flex flex-col gap-3 items-center p-5">
           <div className="w-full rounded-md flex items-start p-6 border h-max ">
-            <div className="mr-5">
+            <div className="mr-5 pt-2">
               <img
                 src={dosen.profile_picture}
                 alt=""
@@ -141,6 +151,7 @@ const DetailDosen = () => {
             <div className="flex flex-col items-start">
               <p className="text-2xl font-bold">{dosen.full_name}</p>
               <p className="text-sm">{dosen.major}</p>
+              <p className="text-sm">{dosen.study_program}</p>
               <p className="text-sm">{dosen.position}</p>
             </div>
           </div>
@@ -164,19 +175,19 @@ const DetailDosen = () => {
                   Research
                 </button>
               </div>
-              <div className="flex mt-2 items-start">
+              <div className="mt-2 items-start">
                 {toggle && (
                   <div className="flex flex-col gap-4">
                     {research.map((item) => (
-                      <div className="flex flex-col items-start">
-                        <p className="text-lg font-bold items-start">
+                      <div className="flex flex-col items-start pt-3">
+                        <p className="text-left text-lg font-bold items-start">
                           {item.research_title}
                         </p>
                         <p className="">
                           Publication Date : {item.publication_date}
                         </p>
                         <a
-                          href="{item.doi_link}"
+                          href="https://doi.org/10.26740/jppms.v4n1.p15-21"
                           className="fill-primary-content"
                         >
                           {item.doi_link}
@@ -188,23 +199,21 @@ const DetailDosen = () => {
                 {!toggle && (
                   <div className="flex flex-col gap-4">
                     {pkm.map((item) => (
-                      <div className="flex flex-col items-start">
-                        <p className="text-left text-lg font-bold items-start">
-                          {item.pkm_title}
-                        </p>
-                        <p className="">{item.pkm_year}</p>
-                        <p className="">{item.partner_name}</p>
-                        <p className="italic">
-                          {showMore
-                            ? item.description
-                            : `${item.description.substring(0, 150)}...`}
-                        </p>
-                        <button
-                          className="focus:outline-none inset-y-0 right-0"
-                          onClick={toggleShowMore}
-                        >
-                          {showMore ? "Less" : "Read More"}
-                        </button>
+                      <div className="flex flex-col items-start pt-3">
+                        <div className="flex w-full justify-between items-center">
+                          <div className="">
+                            <p className="flex text-left text-lg font-bold items-start">
+                              {item.pkm_title}
+                            </p>
+                            <p className="">{item.pkm_year}</p>
+                          </div>
+                          <button
+                            className="justify-end items-end"
+                            onClick={() => openPKMDetailModal(item.id_pkm)}
+                          >
+                            See Detail
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -259,6 +268,52 @@ const DetailDosen = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal untuk menampilkan detail PKM */}
+      {isPKMModalOpen && selectedPKM && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg pb-5">PKM Detail</h3>
+              <div className="overflow-x-auto">
+                <table className="table">
+                  <tbody>
+                    {/* row 1 */}
+                    <tr>
+                      <th className="text-base">PKM Title</th>
+                      <td className="text-base">{selectedPKM.pkm_title}</td>
+                    </tr>
+                    {/* row 2 */}
+                    <tr>
+                      <th className="text-base">PKM Year</th>
+                      <td className="text-base">{selectedPKM.pkm_year}</td>
+                    </tr>
+                    {/* row 3 */}
+                    <tr>
+                      <th className="text-base">Partner Name</th>
+                      <td className="text-base">{selectedPKM.partner_name}</td>
+                    </tr>
+                    {/* row 4 */}
+                    <tr>
+                      <th className="text-base">Desription</th>
+                      <td className="text-base">{selectedPKM.description}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              {/* Tambahkan data PKM lainnya sesuai kebutuhan */}
+              <div className="modal-action">
+                <button
+                  className="btn mr-2"
+                  onClick={() => setPKMModalOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
