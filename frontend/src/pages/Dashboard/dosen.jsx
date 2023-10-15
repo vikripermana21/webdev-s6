@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../../components/topbar";
-import { useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -9,15 +8,15 @@ import moment from "moment";
 const DashboardDosen = () => {
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
-  const [dosen, setDosen] = useState({});
-  const [eduHis, setEduHis] = useState([]);
-  const [teachHis, setTeachHis] = useState([]);
+
   const [research, setResearch] = useState([]);
   const [pkm, setPKM] = useState([]);
   const [selectedResearch, setSelectedResearch] = useState(null); // Menyimpan data research yang dipilih
   const [selectedPKM, setSelectedPKM] = useState(null);
   // State untuk mengontrol modal tambah data research
   const [showAddResearchModal, setShowAddResearchModal] = useState(false);
+  // State untuk mengontrol modal tambah data PKM
+  const [showAddPKMModal, setShowAddPKMModal] = useState(false);
 
   // State untuk menyimpan data baru yang akan ditambahkan
   const [newResearch, setNewResearch] = useState({
@@ -33,9 +32,6 @@ const DashboardDosen = () => {
     partner_name: "",
     description: "",
   });
-
-  // State untuk mengontrol modal tambah data PKM
-  const [showAddPKMModal, setShowAddPKMModal] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:5000/login`)
@@ -349,7 +345,7 @@ const DashboardDosen = () => {
 
   return (
     <div>
-      <Topbar contentType="admin" />
+      <Topbar contentType="dosen" />
       <div className="mt-14 w-screen h-screen flex">
         <div className="w-2/6 flex flex-col gap-3 items-center p-5">
           <div className="w-full rounded-md flex items-start p-6 border h-max ">
@@ -662,7 +658,7 @@ const DashboardDosen = () => {
                 }
               />
             </div>
-            <div className="form-control w-full">
+            <div className="form-control w-full mt-">
               <label className="label">Description</label>
               <textarea
                 rows="5"

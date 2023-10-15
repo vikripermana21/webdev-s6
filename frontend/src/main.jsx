@@ -9,6 +9,9 @@ import Dosen from "./pages/Dosen/index.jsx";
 import DetailDosen from "./pages/Dosen/detail.jsx";
 import DashboardAdmin from "./pages/Dashboard/admin.jsx";
 import DashboardDosen from "./pages/Dashboard/dosen.jsx";
+import UpdateDataDosen from "./pages/Dashboard/Admin/updateDosen.jsx";
+import UpdateDataEducation from "./pages/Dashboard/Admin/updateEduHistory.jsx";
+import UpdateDataTeach from "./pages/Dashboard/Admin/updateTeachHistory.jsx";
 // import DashboardDosen from "./pages/Dashboard/Dosen/dosen.jsx";
 // import DashboardDosenResearch from "./pages/Dashboard/Dosen/crudResearch.jsx";
 // import DashboardDosenPKM from "./pages/Dashboard/Dosen/crudPKM.jsx";
@@ -41,6 +44,18 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/dosen",
     element: <DashboardDosen />,
+  },
+  {
+    path: "/updatedosen/:dosenId",
+    element: <UpdateDataDosen />,
+  },
+  {
+    path: "/updateeduhistory/:dosenId",
+    element: <UpdateDataEducation />,
+  },
+  {
+    path: "/updateteachhistory/:dosenId",
+    element: <UpdateDataTeach />,
   },
   // {
   //   path: "/dashboard/dosen/research",

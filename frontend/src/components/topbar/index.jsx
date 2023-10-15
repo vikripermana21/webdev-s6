@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 const Topbar = ({ contentType }) => {
   return (
@@ -31,12 +32,21 @@ const Topbar = ({ contentType }) => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+        {contentType === "admin" ? (
+          <button
+            className="btn btn-ghost normal-case text-xl"
+            onClick={() => navigate(`/dashboard/admin`)}
+          >
+            <MdOutlineArrowBackIosNew />
+          </button>
+        ) : (
+          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+        )}
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            {contentType === "admin" ? (
+            {contentType === "dosen" || contentType === "admin" ? (
               <Link className="display-none" />
             ) : (
               <Link to={"/dosen"} className="text-black">

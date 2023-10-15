@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { BiSolidQuoteLeft, BiSolidQuoteRight } from "react-icons/bi";
 import Topbar from "../../components/topbar";
 
 const DetailDosen = () => {
