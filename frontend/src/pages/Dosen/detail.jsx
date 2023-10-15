@@ -205,7 +205,12 @@ const DetailDosen = () => {
                             <p className="flex text-left text-lg font-bold items-start">
                               {item.pkm_title}
                             </p>
-                            <p className="">{item.pkm_year}</p>
+                            <p className="">
+                              PKM Date : {""}
+                              {new Date(item.pkm_year).toLocaleDateString(
+                                "en-GB"
+                              )}
+                            </p>
                           </div>
                           <button
                             className="justify-end items-end"
