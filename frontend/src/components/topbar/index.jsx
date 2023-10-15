@@ -57,7 +57,7 @@ const Topbar = ({ contentType }) => {
         </ul>
       </div>
       <div className="navbar-end">
-        {contentType === "admin" ? (
+        {contentType === "admin" || contentType === "dosen" ? (
           <Link className="btn" to={"/logout"}>
             Logout
           </Link>
