@@ -3,6 +3,10 @@
 import UserAcc from "../models/UserAccModel.js";
 import jwt from "jsonwebtoken";
 import ProfileDosen from "../models/ProfileModel.js";
+import TeachHistory from "../models/TeachHistoryModel.js";
+import Research from "../models/ResearchModel.js";
+import PKM from "../models/PKMModel.js";
+import EduHistory from "../models/EduHistoryModel.js";
 const loggedOutTokens = new Set();
 
 export const createAccount = async (req, res) => {
@@ -124,5 +128,34 @@ export const getAccountById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Terjadi kesalahan server" });
+  }
+};
+
+export const deleteAccountWhole = async (req, res) => {
+  try {
+    console.log(req.params);
+    // Find the profile to be deleted
+    const profile = await ProfileDosen.findOne({
+      where: { id_user_account: req.params.id_dosen },
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: "Profile not found" });
+    }
+
+    // Use Promise.all() to perform parallel deletion of related records
+    await Promise.all([
+      TeachHistory.destroy({ where: { id_dosen: profile.id_dosen } }),
+      Research.destroy({ where: { id_dosen: profile.id_dosen } }),
+      PKM.destroy({ where: { id_dosen: profile.id_dosen } }),
+      EduHistory.destroy({ where: { id_dosen: profile.id_dosen } }),
+      profile.destroy(),
+      UserAcc.destroy({ where: { id_user_account: req.params.id_dosen } }),
+    ]);
+
+    return res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

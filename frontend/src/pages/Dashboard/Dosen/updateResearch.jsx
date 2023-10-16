@@ -5,10 +5,18 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import moment from "moment";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateResearch = () => {
+  const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
+
+  const { dosenId } = useParams();
+  // console.log(dosenId);
+  // if (dataAkun.role != "Dosen" && dataAkun.id_user_account === dosenId) {
+  //   navigate("/");
+  // }
   const [research, setResearch] = useState([]);
   const [selectedResearch, setSelectedResearch] = useState(null); // Menyimpan data research yang dipilih
   const [showAddResearchModal, setShowAddResearchModal] = useState(false);
@@ -37,6 +45,9 @@ const UpdateResearch = () => {
       .catch((err) => {
         console.log(err);
       });
+    if (dataAkun.role != "Dosen") {
+      navigate("/");
+    }
     getListResearch();
   }, []);
 

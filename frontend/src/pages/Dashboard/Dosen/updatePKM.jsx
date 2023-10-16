@@ -5,10 +5,13 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePKM = () => {
+  const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
+
   const [pkm, setPKM] = useState([]);
   const [selectedPKM, setSelectedPKM] = useState(null);
   const [showAddPKMModal, setShowAddPKMModal] = useState(false);
@@ -37,7 +40,9 @@ const UpdatePKM = () => {
       .catch((err) => {
         console.log(err);
       });
-
+    if (dataAkun.role != "Dosen") {
+      navigate("/");
+    }
     getListPKM();
   }, []);
 

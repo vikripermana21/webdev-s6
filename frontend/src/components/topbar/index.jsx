@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 const Topbar = ({ contentType }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="navbar bg-base-100 absolute top-0 w-full">
       <div className="navbar-start">
@@ -32,7 +34,7 @@ const Topbar = ({ contentType }) => {
             </li>
           </ul>
         </div>
-        {contentType === "admin" ? (
+        {contentType === "admin" && location.pathname != "/dashboard/admin" ? (
           <button
             className="btn btn-ghost normal-case text-xl"
             onClick={() => navigate(`/dashboard/admin`)}

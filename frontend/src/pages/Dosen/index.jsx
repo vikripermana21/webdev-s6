@@ -31,9 +31,9 @@ const Dosen = () => {
   return (
     <div className="h-screen w-screen">
       <Topbar />
-      <div className="mt-20">
+      <div className="pt-20">
         <div className="flex justify-center items-center">
-          <h1>Staf Dosen</h1>
+          <p className="text-5xl font-bold">Staf Dosen</p>
         </div>
         <div className="grid grid-cols-3">
           {data.map((item) => (

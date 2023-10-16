@@ -5,6 +5,7 @@ import {
   getAccountById,
   login,
   logout,
+  deleteAccountWhole,
 } from "../controllers/UserAccController.js";
 import {
   getAllLecturers,
@@ -54,6 +55,7 @@ router.get("/accounts", getAllAccounts);
 router.get("/accounts/:id_account", getAccountById);
 router.post("/login", login);
 router.post("/logout", logout);
+router.delete("/accounts/:id_dosen", deleteAccountWhole);
 
 // Dosen
 router.post("/lecturer", createLecturer);
