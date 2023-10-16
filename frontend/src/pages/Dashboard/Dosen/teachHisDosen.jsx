@@ -32,7 +32,7 @@ const TeachingHisDosen = () => {
 
   const getTeachingHistory = () => {
     fetch(
-      `http://localhost:5000/teaching-history/${dataAkun.id_user_account}`,
+      `http://localhost:5000/teaching-history/${dataAkun.profile_dosen.id_dosen}`,
       {
         method: "get",
         headers: {

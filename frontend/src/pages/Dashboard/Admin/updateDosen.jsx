@@ -5,11 +5,8 @@ import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
 
 const UpdateDataDosen = () => {
-  // console.log(props);
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
-  // console.log(dataAkun);
   const { dosenId } = useParams();
-  // console.log(dosenId);
   const dataDosen = JSON.parse(localStorage.getItem("idDosen"));
   console.log(dataDosen);
 
@@ -25,7 +22,7 @@ const UpdateDataDosen = () => {
     major: "",
     position: "",
     study_program: "",
-    id_user_account: "",
+    id_dosen: "",
   });
 
   const [loading, setLoading] = useState(true);
@@ -34,26 +31,24 @@ const UpdateDataDosen = () => {
     if (dataAkun.role != "Admin") {
       navigate("/");
     }
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/lecturer/${dosenId}`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setFormData(data);
-        } else {
-          console.error("Failed to fetch data");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [dosenId]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/lecturer/${dosenId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(data);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -67,14 +62,8 @@ const UpdateDataDosen = () => {
   };
 
   const handleFormSubmit = () => {
-    // Validasi data sebelum pengiriman
-    if (!formData.full_name || !formData.email) {
-      console.error("Full Name and Email are required.");
-      return;
-    }
-
     // Periksa apakah data profil sudah ada
-    if (formData.id) {
+    if (formData.id_dosen) {
       // Data profil sudah ada, lakukan pembaruan
       fetch(`http://localhost:5000/lecturer/${dosenId}`, {
         method: "PATCH",
@@ -83,7 +72,6 @@ const UpdateDataDosen = () => {
         },
         body: JSON.stringify({
           ...formData,
-          id_user_account: dosenId,
         }),
       })
         .then((response) => {
@@ -126,7 +114,6 @@ const UpdateDataDosen = () => {
         console.error("Error adding Dosen data:", error);
       });
   };
-
   return (
     <div className="h-screen w-screen flex">
       <Topbar contentType="admin" />
@@ -134,155 +121,198 @@ const UpdateDataDosen = () => {
         <SideBar contentType="admin" />
       </div>
       <div className="w-3/4 flex flex-col gap-3 items-center p-5">
-        <div className="mt-16">
-          <div className="max-w-md mb-5">
+        <div className="mt-16 w-full">
+          <div className="w-full mb-5">
             <h4 className="text-5xl font-bold">Profile Dosen</h4>
           </div>
-          <div className="card-body">
-            <div className="flex flex-col items-start">
-              <label htmlFor="full_name">Full Name</label>
-              <input
-                type="text"
-                id="full_name"
-                className="border rounded p-2 w-full"
-                value={formData.full_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, full_name: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="profile_picture">Profile Picture</label>
-              <input
-                id="profile_picture"
-                type="file"
-                className="border rounded p-2 w-full"
-                onChange={handleFileChange}
-              />
-              {formData.profile_picture && (
-                <img
-                  src={formData.profile_picture}
-                  alt="Profile"
-                  style={{ maxWidth: "100px", marginTop: "10px" }}
-                />
-              )}
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="bio">Bio</label>
-              <input
-                id="bio"
-                type="text"
-                className="border rounded p-2 w-full"
-                value={formData.bio}
-                onChange={(e) =>
-                  setFormData({ ...formData, bio: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="major">Major</label>
-              <input
-                id="major"
-                type="text"
-                className="border rounded p-2 w-full"
-                value={formData.major}
-                onChange={(e) =>
-                  setFormData({ ...formData, major: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="position">Position</label>
-              <input
-                id="position"
-                type="text"
-                className="border rounded p-2 w-full"
-                value={formData.position}
-                onChange={(e) =>
-                  setFormData({ ...formData, position: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="study_program">Study Program</label>
-              <input
-                id="study_program"
-                type="text"
-                className="border rounded p-2 w-full"
-                value={formData.study_program}
-                onChange={(e) =>
-                  setFormData({ ...formData, study_program: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="place_of_birth">Place of Birth</label>
-              <input
-                id="place_of_birth"
-                type="text"
-                className="border rounded p-2 w-full"
-                value={formData.place_of_birth}
-                onChange={(e) =>
-                  setFormData({ ...formData, place_of_birth: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="date_of_birth">Date of Birth</label>
-              <input
-                id="date_of_birth"
-                type="date"
-                className="border rounded p-2 w-full"
-                value={formData.date_of_birth}
-                onChange={(e) =>
-                  setFormData({ ...formData, date_of_birth: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="gender">Gender</label>
-              <select
-                id="gender"
-                className="border rounded p-2 w-full"
-                value={formData.gender}
-                onChange={(e) =>
-                  setFormData({ ...formData, gender: e.target.value })
-                }
-              >
-                <option value="Laki-Laki">Laki-Laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
-            </div>
-            <div className="flex flex-col items-start">
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                type="email"
-                className="border rounded p-2 w-full"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-              />
-            </div>
-
-            {/* ... Form Input Fields ... */}
-            <div className="card-actions justify-between mt-2">
-              <button
-                type="button"
-                onClick={() => navigate("/dashboard/admin")}
-                className="btn btn-sm"
-              >
-                <BiArrowBack /> Back
-              </button>
-              <button
-                type="button"
-                onClick={handleFormSubmit}
-                className="btn btn-sm btn-primary"
-                disabled={loading}
-              >
-                Save
-              </button>
+          <div className="card card-compact bg-base-100 shadow-xl ">
+            <div className="overflow-x-auto">
+              <table className="table">
+                <tbody>
+                  {/* row 1 */}
+                  <tr>
+                    <th className="text-base">Full name</th>
+                    <td className="text-base">
+                      <input
+                        type="text"
+                        id="full_name"
+                        className="border rounded p-2 w-full"
+                        value={formData.full_name}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            full_name: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 2 */}
+                  <tr>
+                    <th className="text-base">Profile Picture</th>
+                    <td className="text-base">
+                      <input
+                        id="profile_picture"
+                        type="file"
+                        className="border rounded p-2 w-full"
+                        onChange={handleFileChange}
+                      />
+                      {formData.profile_picture && (
+                        <img
+                          src={formData.profile_picture}
+                          alt="Profile"
+                          style={{ maxWidth: "100px", marginTop: "10px" }}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                  {/* row 3 */}
+                  <tr>
+                    <th className="text-base">Bio</th>
+                    <td className="text-base">
+                      <textarea
+                        id="bio"
+                        type="textarea"
+                        rows="4"
+                        className="border rounded p-2 w-full"
+                        value={formData.bio}
+                        onChange={(e) =>
+                          setFormData({ ...formData, bio: e.target.value })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 4 */}
+                  <tr>
+                    <th className="text-base">Major</th>
+                    <td className="text-base">
+                      <input
+                        id="major"
+                        type="text"
+                        className="border rounded p-2 w-full"
+                        value={formData.major}
+                        onChange={(e) =>
+                          setFormData({ ...formData, major: e.target.value })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 5 */}
+                  <tr>
+                    <th className="text-base">Position</th>
+                    <td className="text-base">
+                      <input
+                        id="position"
+                        type="text"
+                        className="border rounded p-2 w-full"
+                        value={formData.position}
+                        onChange={(e) =>
+                          setFormData({ ...formData, position: e.target.value })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 6 */}
+                  <tr>
+                    <th className="text-base">Study Program</th>
+                    <td className="text-base">
+                      {" "}
+                      <input
+                        id="study_program"
+                        type="text"
+                        className="border rounded p-2 w-full"
+                        value={formData.study_program}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            study_program: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 7 */}
+                  <tr>
+                    <th className="text-base">Place Of Birth</th>
+                    <td className="text-base">
+                      {" "}
+                      <input
+                        id="place_of_birth"
+                        type="text"
+                        className="border rounded p-2 w-full"
+                        value={formData.place_of_birth}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            place_of_birth: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 8 */}
+                  <tr>
+                    <th className="text-base">Date Of Birth</th>
+                    <td className="text-base">
+                      <input
+                        id="date_of_birth"
+                        type="date"
+                        className="border rounded p-2 w-full"
+                        value={formData.date_of_birth}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            date_of_birth: e.target.value,
+                          })
+                        }
+                      />
+                    </td>
+                  </tr>
+                  {/* row 9 */}
+                  <tr>
+                    <th className="text-base">Gender</th>
+                    <td className="text-base">
+                      {" "}
+                      <select
+                        id="gender"
+                        className="border rounded p-2 w-full"
+                        value={formData.gender}
+                        onChange={(e) =>
+                          setFormData({ ...formData, gender: e.target.value })
+                        }
+                      >
+                        <option value="Laki-Laki">Laki-Laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                      </select>
+                    </td>
+                  </tr>
+                  {/* row 10 */}
+                  <tr>
+                    <th className="text-base">Email</th>
+                    <td className="text-base">
+                      <input
+                        id="email"
+                        type="email"
+                        className="border rounded p-2 w-full"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="card-actions justify-end items-center mt-2">
+                <button
+                  type="button"
+                  onClick={handleFormSubmit}
+                  className="btn btn-sm btn-primary w-44"
+                  disabled={loading}
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>

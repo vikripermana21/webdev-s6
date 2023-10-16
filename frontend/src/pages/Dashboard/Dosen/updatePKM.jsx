@@ -47,7 +47,7 @@ const UpdatePKM = () => {
   }, []);
 
   const getListPKM = () => {
-    fetch(`http://localhost:5000/pkm/${dataAkun.id_user_account}`, {
+    fetch(`http://localhost:5000/pkm/${dataAkun.profile_dosen.id_dosen}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -130,7 +130,7 @@ const UpdatePKM = () => {
       },
       body: JSON.stringify({
         ...newPKM,
-        id_dosen: dataAkun.id_user_account,
+        id_dosen: dataAkun.profile_dosen.id_dosen,
         pkm_year: moment(newPKM.pkm_year).format("YYYY-MM-DD"),
       }), // Mengirim data PKM baru
     })

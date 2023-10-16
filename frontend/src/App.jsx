@@ -2,9 +2,10 @@ import { useState } from "react";
 import "./App.css";
 import Topbar from "./components/topbar";
 import backgroundImage from "./assets/bg-landingpage.jpg";
+import { useNavigate } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const navigate = useNavigate();
 
   return (
     <div className="h-screen w-screen">
@@ -24,6 +25,12 @@ function App() {
               PolbanEduStaff is a special website that contains data on
               lecturers at the Bandung State Polytechnic Campus
             </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/dosen`)}
+            >
+              Get Started!
+            </button>
           </div>
         </div>
       </div>
