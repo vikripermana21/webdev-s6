@@ -184,7 +184,10 @@ const DetailDosen = () => {
                           {item.research_title}
                         </p>
                         <p className="">
-                          Publication Date : {item.publication_date}
+                          Publication Date :{" "}
+                          {new Date(item.publication_date).toLocaleDateString(
+                            "en-GB"
+                          )}
                         </p>
                         <a
                           href="https://doi.org/10.26740/jppms.v4n1.p15-21"
@@ -205,7 +208,7 @@ const DetailDosen = () => {
                             <p className="flex text-left text-lg font-bold items-start">
                               {item.pkm_title}
                             </p>
-                            <p className="">
+                            <p className="flex text-left items-start">
                               PKM Date : {""}
                               {new Date(item.pkm_year).toLocaleDateString(
                                 "en-GB"
@@ -291,7 +294,11 @@ const DetailDosen = () => {
                     {/* row 2 */}
                     <tr>
                       <th className="text-base">PKM Year</th>
-                      <td className="text-base">{selectedPKM.pkm_year}</td>
+                      <td className="text-base">
+                        {new Date(selectedPKM.pkm_year).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </td>
                     </tr>
                     {/* row 3 */}
                     <tr>
@@ -301,10 +308,15 @@ const DetailDosen = () => {
                     {/* row 4 */}
                     <tr>
                       <th className="text-base">Desription</th>
-                      <td className="text-base">{selectedPKM.description}</td>
                     </tr>
                   </tbody>
                 </table>
+                <div className="pl-4 pr-3">
+                  <p className="text-justify">
+                    {"   "}
+                    {selectedPKM.description}
+                  </p>
+                </div>
               </div>
               {/* Tambahkan data PKM lainnya sesuai kebutuhan */}
               <div className="modal-action">
