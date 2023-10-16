@@ -234,7 +234,7 @@ const DetailDosen = () => {
               Bio
             </h4>
             <div className="p-5">
-              <p className="italic">{dosen.bio}</p>
+              <p className="">{dosen.bio}</p>
             </div>
           </div>
           <div className="w-full rounded-md flex flex-col items-start border h-max relative">

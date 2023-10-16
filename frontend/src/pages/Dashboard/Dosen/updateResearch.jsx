@@ -12,11 +12,6 @@ const UpdateResearch = () => {
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
 
-  const { dosenId } = useParams();
-  // console.log(dosenId);
-  // if (dataAkun.role != "Dosen" && dataAkun.id_user_account === dosenId) {
-  //   navigate("/");
-  // }
   const [research, setResearch] = useState([]);
   const [selectedResearch, setSelectedResearch] = useState(null); // Menyimpan data research yang dipilih
   const [showAddResearchModal, setShowAddResearchModal] = useState(false);
@@ -52,7 +47,7 @@ const UpdateResearch = () => {
   }, []);
 
   const getListResearch = () => {
-    fetch(`http://localhost:5000/research/${dataAkun.id_user_account}`, {
+    fetch(`http://localhost:5000/research/${dataAkun.profile_dosen.id_dosen}`, {
       method: "get",
       headers: {
         Accept: "application/json",
@@ -137,7 +132,7 @@ const UpdateResearch = () => {
       },
       body: JSON.stringify({
         ...newResearch,
-        id_dosen: dataAkun.id_user_account,
+        id_dosen: dataAkun.profile_dosen.id_dosen,
         publication_date: moment(newResearch.publication_date).format(
           "YYYY-MM-DD"
         ),
