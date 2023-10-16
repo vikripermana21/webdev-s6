@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProfileDosen = () => {
+  const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
+  if (dataAkun.role != "Dosen") {
+    navigate("/");
+  }
+  const { dosenId } = useParams();
+  console.log(dosenId);
+
   const [dosen, setDosen] = useState([]);
 
   useEffect(() => {
@@ -22,6 +30,9 @@ const ProfileDosen = () => {
       .catch((err) => {
         console.log(err);
       });
+    if (dataAkun.role != "Dosen") {
+      navigate("/");
+    }
     getProfileDosen();
   }, []);
 

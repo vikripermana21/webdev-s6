@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Topbar from "../../components/topbar";
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin5Line } from "react-icons/ri";
 import SideBar from "../../components/sidebar";
 
 const DashboardDosen = () => {
   const navigate = useNavigate();
-  const [dosen, setDosen] = useState([]);
+  const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
 
+  useEffect(() => {
+    if (dataAkun.role != "Dosen") {
+      navigate("/");
+    }
+  });
   return (
     <div className="h-screen w-screen flex">
       <Topbar contentType="dosen" />

@@ -3,6 +3,10 @@
 import UserAcc from "../models/UserAccModel.js";
 import jwt from "jsonwebtoken";
 import ProfileDosen from "../models/ProfileModel.js";
+import TeachHistory from "../models/TeachHistoryModel.js";
+import Research from "../models/ResearchModel.js";
+import PKM from "../models/PKMModel.js";
+import EduHistory from "../models/EduHistoryModel.js";
 const loggedOutTokens = new Set();
 
 export const createAccount = async (req, res) => {
@@ -124,5 +128,58 @@ export const getAccountById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Terjadi kesalahan server" });
+  }
+};
+
+export const deleteAccountWhole = async (req, res) => {
+  try {
+    console.log(req.params);
+    // Find the profile to be deleted
+    const profile = await ProfileDosen.findOne({
+      where: { id_user_account: req.params.id_dosen },
+    });
+
+    // Use try...catch blocks to perform deletion of related records
+    try {
+      await TeachHistory.destroy({ where: { id_dosen: profile.id_dosen } });
+    } catch (error) {
+      console.log("TeachHistory table not found:", error.message);
+    }
+
+    try {
+      await Research.destroy({ where: { id_dosen: profile.id_dosen } });
+    } catch (error) {
+      console.log("Research table not found:", error.message);
+    }
+
+    try {
+      await PKM.destroy({ where: { id_dosen: profile.id_dosen } });
+    } catch (error) {
+      console.log("PKM table not found:", error.message);
+    }
+
+    try {
+      await EduHistory.destroy({ where: { id_dosen: profile.id_dosen } });
+    } catch (error) {
+      console.log("EduHistory table not found:", error.message);
+    }
+    try {
+      await EduHistory.destroy({ where: { id_dosen: profile.id_dosen } });
+    } catch (error) {
+      console.log("EduHistory table not found:", error.message);
+    }
+    try {
+      await profile.destroy();
+    } catch (error) {
+      console.log("profile table not found:", error.message);
+    }
+
+    // Delete the UserAcc
+    await UserAcc.destroy({ where: { id_user_account: req.params.id_dosen } });
+
+    return res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

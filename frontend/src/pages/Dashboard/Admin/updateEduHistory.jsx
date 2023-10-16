@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import moment from "moment";
 import { AiOutlinePlus } from "react-icons/ai";
 
 const UpdateDataEducation = () => {
+  const navigate = useNavigate();
+  const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
+  console.log(dataAkun);
+  const dataDosen = JSON.parse(localStorage.getItem("idDosen"));
+  console.log(dataDosen);
+
   const { dosenId } = useParams();
   const [education, setEducation] = useState([]);
   const [selectedEducation, setSelectedEducation] = useState(null);
@@ -21,6 +27,9 @@ const UpdateDataEducation = () => {
   });
 
   useEffect(() => {
+    if (dataAkun.role != "Admin") {
+      navigate("/");
+    }
     getListEducationHistory();
   }, []);
 
@@ -171,7 +180,7 @@ const UpdateDataEducation = () => {
                           <tr>
                             <th>No</th>
                             <th>Institution</th>
-                            <th>Degree Date</th>
+                            <th>Degree</th>
                             <th>Graduation Date</th>
                             <th>Action</th>
                           </tr>

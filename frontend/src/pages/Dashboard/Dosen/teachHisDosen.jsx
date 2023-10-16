@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
+import { useNavigate } from "react-router-dom";
 
 const TeachingHisDosen = () => {
+  const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
   const [teachHis, setTeachHis] = useState([]);
@@ -22,6 +24,9 @@ const TeachingHisDosen = () => {
       .catch((err) => {
         console.log(err);
       });
+    if (dataAkun.role != "Dosen") {
+      navigate("/");
+    }
     getTeachingHistory();
   }, []);
 

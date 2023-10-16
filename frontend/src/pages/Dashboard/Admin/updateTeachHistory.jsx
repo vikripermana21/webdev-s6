@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Topbar from "../../../components/topbar";
 import SideBar from "../../../components/sidebar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import moment from "moment";
 import { AiOutlinePlus } from "react-icons/ai";
 
 const UpdateDataTeach = () => {
+  const navigate = useNavigate();
+  const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
+  console.log(dataAkun);
+
   const { dosenId } = useParams();
   const [teaching, setTeaching] = useState([]);
   const [selectedTeaching, setSelectedTeaching] = useState(null);
@@ -22,6 +26,9 @@ const UpdateDataTeach = () => {
   });
 
   useEffect(() => {
+    if (dataAkun.role != "Admin") {
+      navigate("/");
+    }
     getListTeachingHistory();
   }, []);
 

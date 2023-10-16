@@ -7,6 +7,7 @@ const Login = () => {
   let navigate = useNavigate();
   const [nip, setNip] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(null);
 
   const submitLogin = () => {
     fetch("http://localhost:5000/login", {
@@ -15,14 +16,17 @@ const Login = () => {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-
-      //make sure to serialize your JSON body
       body: JSON.stringify({
         nip: nip,
         password: password,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         localStorage.setItem("infoAkun", JSON.stringify(data.infoAkun));
         if (data.infoAkun.role === "Admin") {
@@ -32,12 +36,22 @@ const Login = () => {
           localStorage.setItem("userRole", "Dosen");
           navigate("/dashboard/dosen");
         } else {
-          console.log("Peran pengguna tidak valid:", data.role); // Tambahkan ini
+          console.log("Peran pengguna tidak valid:", data.role);
         }
       })
       .catch((err) => {
         console.log(err);
+        // Menampilkan pesan kesalahan dengan menggunakan alert
+        alert("Login failed. Please check your credentials.");
+        // Mengatur pesan kesalahan pada state untuk merubah tampilan input
+        setLoginError("Invalid credentials");
       });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      submitLogin();
+    }
   };
 
   return (
@@ -55,24 +69,42 @@ const Login = () => {
                 id="nip"
                 type="text"
                 placeholder="Insert NIP"
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setNip(e.target.value)}
+                className={`input input-bordered w-full max-w-xs mt-2 ${
+                  loginError === "Invalid credentials" ? "input-error" : ""
+                }`}
+                onChange={(e) => {
+                  setNip(e.target.value);
+                  setLoginError(null); // Menghilangkan pesan kesalahan saat input berubah
+                }}
+                onKeyDown={handleKeyDown}
               />
+              {loginError === "Invalid credentials" && (
+                <span className="text-red-600">Invalid NIP or Password</span>
+              )}
             </div>
             <div className="flex flex-col items-start">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password ">Password</label>
               <input
                 id="password"
                 type="password"
                 placeholder="Insert Password"
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setPassword(e.target.value)}
+                className={`input input-bordered w-full max-w-xs mt-2 ${
+                  loginError === "Invalid credentials" ? "input-error" : ""
+                }`}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setLoginError(null); // Menghilangkan pesan kesalahan saat input berubah
+                }}
+                onKeyDown={handleKeyDown}
               />
+              {loginError === "Invalid credentials" && (
+                <span className="text-red-600">Invalid NIP or Password</span>
+              )}
             </div>
             <div className="card-actions justify-between mt-2">
               <button
                 type="button"
-                onClick={() => navigate("/")}
+                onClick={() => navigate(`/`)}
                 className="btn btn-sm"
               >
                 <BiArrowBack />

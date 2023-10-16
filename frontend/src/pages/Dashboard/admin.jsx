@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Topbar from "../../components/topbar";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
+
+  const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
+
   const [dosen, setDosen] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false); // Untuk mengelola status modal
   const [newDosenData, setNewDosenData] = useState({ nip: "", password: "" }); // State input
 
   useEffect(() => {
+    if (dataAkun.role != "Admin") {
+      navigate("/");
+    }
     getListDosen();
   }, []); // Efek ini hanya berjalan sekali saat komponen dimuat
 
@@ -27,7 +33,6 @@ const DashboardAdmin = () => {
                 lecturer,
               ])
             );
-
             const mergedData = accountsData.map((account) => {
               const lecturer = lecturerMap.get(account.id_user_account);
               if (lecturer) {
@@ -82,6 +87,29 @@ const DashboardAdmin = () => {
       });
   };
 
+  let rowNum = 1;
+
+  const handleDeleteAccount = (id_user_account) => {
+    // Lakukan permintaan fetch untuk menghapus data PKM dengan id_pkm tertentu
+    fetch(`http://localhost:5000/accounts/${id_user_account}`, {
+      method: "DELETE", // Menggunakan metode DELETE untuk menghapus data
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Gagal menghapus data Account");
+        }
+        // Jika berhasil dihapus, perbarui data PKM yang ditampilkan
+        getListDosen();
+      })
+      .catch((err) => {
+        console.error("Gagal menghapus data Account:", err);
+      });
+  };
+
   return (
     <div className="h-screen w-screen flex">
       <Topbar contentType="admin" />
@@ -104,7 +132,7 @@ const DashboardAdmin = () => {
                 {/* head */}
                 <thead>
                   <tr>
-                    <th>ID Dosen</th>
+                    <th>No</th>
                     <th>NIP</th>
                     <th>Full Name</th>
                     <th>Major</th>
@@ -115,8 +143,8 @@ const DashboardAdmin = () => {
                 <tbody>
                   {/* Menampilkan data dosen */}
                   {dosen.map((d) => (
-                    <tr key={d.id_user_account}>
-                      <td>{d.id_user_account}</td>
+                    <tr key={d.id_dosen}>
+                      <td>{rowNum++}</td>
                       <td>{d.nip}</td>
                       <td>{d.full_name}</td>
                       <td>{d.major}</td>
@@ -125,13 +153,20 @@ const DashboardAdmin = () => {
                         {/* Tombol-tombol CRUD */}
                         <button
                           className="btn-primary hover:bg-primary-900 text-white font-bold py-2 px-4 mx-2 rounded"
-                          onClick={() =>
-                            navigate(`/updatedosen/${d.id_user_account}`)
-                          }
+                          onClick={() => {
+                            // Mengirim parameter ke halaman berikutnya
+                            localStorage.setItem("idDosen", d.id_user_account);
+                            navigate(`/updatedosen/${d.id_dosen}`);
+                          }}
                         >
                           <FaRegEdit />
                         </button>
-                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
+                        <button
+                          className="bg-red-500 hover.bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded"
+                          onClick={() => {
+                            handleDeleteAccount(d.id_user_account);
+                          }}
+                        >
                           <RiDeleteBin5Line />
                         </button>
                       </td>
