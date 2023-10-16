@@ -11,6 +11,8 @@ const UpdateDataEducation = () => {
   const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
+  const dataDosen = JSON.parse(localStorage.getItem("idDosen"));
+  console.log(dataDosen);
 
   const { dosenId } = useParams();
   const [education, setEducation] = useState([]);
@@ -178,7 +180,7 @@ const UpdateDataEducation = () => {
                           <tr>
                             <th>No</th>
                             <th>Institution</th>
-                            <th>Degree Date</th>
+                            <th>Degree</th>
                             <th>Graduation Date</th>
                             <th>Action</th>
                           </tr>

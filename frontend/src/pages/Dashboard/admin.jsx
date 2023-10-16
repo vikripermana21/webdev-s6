@@ -87,6 +87,29 @@ const DashboardAdmin = () => {
       });
   };
 
+  let rowNum = 1;
+
+  const handleDeleteAccount = (id_user_account) => {
+    // Lakukan permintaan fetch untuk menghapus data PKM dengan id_pkm tertentu
+    fetch(`http://localhost:5000/accounts/${id_user_account}`, {
+      method: "DELETE", // Menggunakan metode DELETE untuk menghapus data
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Gagal menghapus data Account");
+        }
+        // Jika berhasil dihapus, perbarui data PKM yang ditampilkan
+        getListDosen();
+      })
+      .catch((err) => {
+        console.error("Gagal menghapus data Account:", err);
+      });
+  };
+
   return (
     <div className="h-screen w-screen flex">
       <Topbar contentType="admin" />
@@ -109,7 +132,7 @@ const DashboardAdmin = () => {
                 {/* head */}
                 <thead>
                   <tr>
-                    <th>ID Dosen</th>
+                    <th>No</th>
                     <th>NIP</th>
                     <th>Full Name</th>
                     <th>Major</th>
@@ -121,7 +144,7 @@ const DashboardAdmin = () => {
                   {/* Menampilkan data dosen */}
                   {dosen.map((d) => (
                     <tr key={d.id_dosen}>
-                      <td>{d.id_dosen}</td>
+                      <td>{rowNum++}</td>
                       <td>{d.nip}</td>
                       <td>{d.full_name}</td>
                       <td>{d.major}</td>
@@ -138,7 +161,12 @@ const DashboardAdmin = () => {
                         >
                           <FaRegEdit />
                         </button>
-                        <button className="bg-red-500 hover.bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
+                        <button
+                          className="bg-red-500 hover.bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded"
+                          onClick={() => {
+                            handleDeleteAccount(d.id_user_account);
+                          }}
+                        >
                           <RiDeleteBin5Line />
                         </button>
                       </td>
