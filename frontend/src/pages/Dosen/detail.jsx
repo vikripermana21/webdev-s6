@@ -190,7 +190,7 @@ const DetailDosen = () => {
                           )}
                         </p>
                         <a
-                          href="https://doi.org/10.26740/jppms.v4n1.p15-21"
+                          href={item.doi_link}
                           className="fill-primary-content"
                         >
                           {item.doi_link}
