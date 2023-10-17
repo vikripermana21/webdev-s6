@@ -33,7 +33,13 @@ const DashboardAdmin = () => {
                 lecturer,
               ])
             );
-            const mergedData = accountsData.map((account) => {
+
+            // Filter hanya data dengan role "Dosen"
+            const dosenData = accountsData.filter(
+              (account) => account.role === "Dosen"
+            );
+
+            const mergedData = dosenData.map((account) => {
               const lecturer = lecturerMap.get(account.id_user_account);
               if (lecturer) {
                 return {

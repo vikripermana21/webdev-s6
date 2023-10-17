@@ -146,7 +146,7 @@ const UpdatePKM = () => {
           partner_name: "",
           description: "",
         });
-        setShowAddPKMModal(false);
+        setShowAddPKMModal(false); // Tutup modal
       })
       .catch((err) => {
         console.error("Gagal menambahkan data PKM:", err);
