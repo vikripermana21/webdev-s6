@@ -122,7 +122,8 @@ const UpdateDataEducation = () => {
           institution: "",
           degree: "",
           graduation_date: "",
-        }); // Kosongkan input setelah berhasil
+        });
+        setShowAddEducationModal(false);
       })
       .catch((err) => {
         console.error("Gagal menambahkan data education:", err);

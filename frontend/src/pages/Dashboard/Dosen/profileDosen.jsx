@@ -7,9 +7,6 @@ const ProfileDosen = () => {
   const navigate = useNavigate();
   const dataAkun = JSON.parse(localStorage.getItem("infoAkun"));
   console.log(dataAkun);
-  if (dataAkun.role != "Dosen") {
-    navigate("/");
-  }
   const { dosenId } = useParams();
   console.log(dosenId);
 

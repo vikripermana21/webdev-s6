@@ -145,7 +145,8 @@ const UpdatePKM = () => {
           pkm_year: "",
           partner_name: "",
           description: "",
-        }); // Kosongkan input setelah berhasil
+        });
+        setShowAddPKMModal(false);
       })
       .catch((err) => {
         console.error("Gagal menambahkan data PKM:", err);

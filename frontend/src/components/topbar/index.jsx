@@ -42,12 +42,7 @@ const Topbar = ({ contentType }) => {
             <MdOutlineArrowBackIosNew />
           </button>
         ) : (
-          <a
-            onClick={() => navigate(`/`)}
-            className="btn btn-ghost normal-case text-xl"
-          >
-            PolbanEduStaff
-          </a>
+          <p className="pl-3 font-bold normal-case text-xl">PolbanEduStaff</p>
         )}
       </div>
       <div className="navbar-center hidden lg:flex">

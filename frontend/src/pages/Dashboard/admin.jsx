@@ -80,11 +80,33 @@ const DashboardAdmin = () => {
         setNewDosenData({
           nip: "",
           password: "",
-        }); // Kosongkan input setelah berhasil
+        });
+        setModalOpen(false);
       })
       .catch((err) => {
         console.error("Gagal menambahkan data dosen:", err);
       });
+  };
+
+  const handleDeleteAccount = (id) => {
+    // Konfirmasi sebelum menghapus
+    if (window.confirm("Anda yakin ingin menghapus data ini?")) {
+      fetch(`http://localhost:5000/accounts/${id}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Dosen data deleted successfully!");
+            // Perbarui data dosen setelah penghapusan
+            getListDosen();
+          } else {
+            console.error("Error deleting Dosen data");
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting Dosen data:", error);
+        });
+    }
   };
 
   let rowNum = 1;
@@ -140,7 +162,12 @@ const DashboardAdmin = () => {
                         >
                           <FaRegEdit />
                         </button>
-                        <button className="bg-red-500 hover.bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded">
+                        <button
+                          className="bg-red-500 hover.bg-red-700 text-white font-bold py-2 px-4 mx-2 rounded"
+                          onClick={() => {
+                            handleDeleteAccount(d.id_user_account);
+                          }}
+                        >
                           <RiDeleteBin5Line />
                         </button>
                       </td>

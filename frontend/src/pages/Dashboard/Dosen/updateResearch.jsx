@@ -148,7 +148,8 @@ const UpdateResearch = () => {
           research_title: "",
           publication_date: "",
           doi_link: "",
-        }); // Kosongkan input setelah berhasil
+        });
+        setShowAddResearchModal(false);
       })
       .catch((err) => {
         console.error("Gagal menambahkan data research:", err);

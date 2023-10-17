@@ -122,7 +122,8 @@ const UpdateDataTeach = () => {
           position: "",
           start_date: "",
           end_date: "",
-        }); // Kosongkan input setelah berhasil
+        });
+        setShowAddTeachingModal(false);
       })
       .catch((err) => {
         console.error("Gagal menambahkan data teaching:", err);
