@@ -222,11 +222,12 @@ const UpdatePKM = () => {
                         <td>
                           <button
                             className="btn-ghost text-primary"
-                            onClick={() =>
+                            onClick={() => {
+                              // localStorage.setItem("idPkm", item.id_pkm);
                               navigate(
                                 `/dashboard/pdfreview/pkm/${item.id_pkm}`
-                              )
-                            }
+                              );
+                            }}
                           >
                             Lihat PDF
                           </button>
