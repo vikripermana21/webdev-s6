@@ -195,8 +195,8 @@ const TeachingHisDosen = () => {
                             <th>No</th>
                             <th>Institution</th>
                             <th>Position</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>Start Date (Academic Year)</th>
+                            <th>End Date (Academic Year)</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -277,7 +277,7 @@ const TeachingHisDosen = () => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Start Date</label>
+              <label className="label">Start Date (Academic Year)</label>
               <input
                 type="date"
                 placeholder="Type here"
@@ -292,7 +292,7 @@ const TeachingHisDosen = () => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">End Date</label>
+              <label className="label">End Date (Academic Year)</label>
               <input
                 type="date"
                 placeholder="Type here"
@@ -364,7 +364,7 @@ const TeachingHisDosen = () => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">Start Date</label>
+              <label className="label">Start Date (Academic Year)</label>
               <input
                 type="date"
                 placeholder="Type here"
@@ -379,7 +379,7 @@ const TeachingHisDosen = () => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label">End Date</label>
+              <label className="label">End Date (Academic Year)</label>
               <input
                 type="date"
                 placeholder="Type here"

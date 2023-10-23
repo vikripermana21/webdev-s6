@@ -48,6 +48,14 @@ const DetailDosenPKM = () => {
             <p className="text-base text-left">
               {moment(pkm.pkm_year).format("DD MMMM YYYY")}
             </p>
+            <div className="justify-start text-left">
+              <a
+                className="text-base font-bold text-left items-start"
+                href={pkm.pkm_link}
+              >
+                {pkm.pkm_link}
+              </a>
+            </div>
             <br />
             <p className="text-base font-bold text-left">Description</p>
             <p className="text-base text-left">{pkm.description}</p>

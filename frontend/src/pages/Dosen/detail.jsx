@@ -187,7 +187,7 @@ const DetailDosen = () => {
                             localStorage.setItem("idDosen", item.id_dosen);
                             navigate(`/dosen/research/${item.id_research}`);
                           }}
-                          href="#"
+                          href=""
                         >
                           {item.research_title}
                         </a>
@@ -213,7 +213,7 @@ const DetailDosen = () => {
                                 localStorage.setItem("idDosen", item.id_dosen);
                                 navigate(`/dosen/pkm/${item.id_pkm}`);
                               }}
-                              href="#"
+                              href=""
                             >
                               {item.pkm_title}
                             </a>
