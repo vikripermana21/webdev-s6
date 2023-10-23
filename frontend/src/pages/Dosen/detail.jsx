@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Topbar from "../../components/topbar";
 
 const DetailDosen = () => {
   const { dosenId } = useParams();
+  const navigate = useNavigate();
 
   const [dosen, setDosen] = useState({});
   const [eduHis, setEduHis] = useState([]);
@@ -217,7 +218,10 @@ const DetailDosen = () => {
                           </div>
                           <button
                             className="justify-end items-end"
-                            onClick={() => openPKMDetailModal(item.id_pkm)}
+                            onClick={() => {
+                              localStorage.setItem("idDosen", item.id_dosen);
+                              navigate(`/dosen/pkm/${item.id_pkm}`);
+                            }}
                           >
                             See Detail
                           </button>

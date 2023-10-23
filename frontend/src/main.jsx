@@ -20,6 +20,7 @@ import UpdatePKM from "./pages/Dashboard/Dosen/updatePKM.jsx";
 import UpdateResearch from "./pages/Dashboard/Dosen/updateResearch.jsx";
 import PDFReview from "./pages/Dashboard/Dosen/pdfReviewPKM.jsx";
 import PDFReviewResearch from "./pages/Dashboard/Dosen/pdfReviewResearch.jsx";
+import DetailDosenPKM from "./pages/Dosen/detailpkm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/dosen/:dosenId",
     element: <DetailDosen />,
+  },
+  {
+    path: "/dosen/pkm/:id",
+    element: <DetailDosenPKM />,
   },
   {
     path: "/dashboard/admin",
