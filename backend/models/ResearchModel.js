@@ -21,6 +21,9 @@ const Research = db.define(
     pdf_research: {
       type: DataTypes.TEXT,
     },
+    description: {
+      type: DataTypes.TEXT,
+    },
     id_dosen: {
       // Define the foreign key field
       type: DataTypes.INTEGER,
