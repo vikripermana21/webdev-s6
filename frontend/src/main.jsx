@@ -18,6 +18,10 @@ import EducationHisDosen from "./pages/Dashboard/Dosen/eduHisDosen.jsx";
 import TeachingHisDosen from "./pages/Dashboard/Dosen/teachHisDosen.jsx";
 import UpdatePKM from "./pages/Dashboard/Dosen/updatePKM.jsx";
 import UpdateResearch from "./pages/Dashboard/Dosen/updateResearch.jsx";
+import PDFReview from "./pages/Dashboard/Dosen/pdfReviewPKM.jsx";
+import PDFReviewResearch from "./pages/Dashboard/Dosen/pdfReviewResearch.jsx";
+import DetailDosenPKM from "./pages/Dosen/detailpkm.jsx";
+import DetailDosenResearch from "./pages/Dosen/detailResearch.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +39,14 @@ const router = createBrowserRouter([
   {
     path: "/dosen/:dosenId",
     element: <DetailDosen />,
+  },
+  {
+    path: "/dosen/pkm/:id",
+    element: <DetailDosenPKM />,
+  },
+  {
+    path: "/dosen/research/:id",
+    element: <DetailDosenResearch />,
   },
   {
     path: "/dashboard/admin",
@@ -59,6 +71,14 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/updatepkm",
     element: <UpdatePKM />,
+  },
+  {
+    path: "/dashboard/pdfreview/pkm/:dosenId",
+    element: <PDFReview />,
+  },
+  {
+    path: "/dashboard/pdfreview/research/:dosenId",
+    element: <PDFReviewResearch />,
   },
   {
     path: "/dashboard/updateresearch",

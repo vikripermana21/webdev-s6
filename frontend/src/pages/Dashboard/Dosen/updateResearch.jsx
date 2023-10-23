@@ -20,7 +20,8 @@ const UpdateResearch = () => {
     research_title: "",
     publication_date: "",
     doi_link: "",
-    id_dosen: "",
+    pdf_research: "",
+    description: "",
   });
 
   let rowNum = 1;
@@ -45,6 +46,24 @@ const UpdateResearch = () => {
     }
     getListResearch();
   }, []);
+
+  const handleFileChangeUpdate = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type === "application/pdf") {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedResearch({
+            ...selectedResearch,
+            pdf_research: reader.result, // Menggunakan reader.result yang sudah dalam bentuk base64 string
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Hanya file PDF yang diperbolehkan.");
+      }
+    }
+  };
 
   const getListResearch = () => {
     fetch(`http://localhost:5000/research/${dataAkun.profile_dosen.id_dosen}`, {
@@ -80,6 +99,7 @@ const UpdateResearch = () => {
           publication_date: moment(selectedResearch.publication_date).format(
             "YYYY-MM-DD"
           ),
+          // pdf_research: selectedResearch.pdf_research,
         }), // Mengirim data research baru
       })
         .then((response) => {
@@ -101,9 +121,9 @@ const UpdateResearch = () => {
     document.getElementById("my_modal_1").showModal();
   };
 
-  const handleDeletePKM = (id_pkm) => {
-    // Lakukan permintaan fetch untuk menghapus data PKM dengan id_pkm tertentu
-    fetch(`http://localhost:5000/pkm/${id_pkm}`, {
+  const handleDeleteResearch = (id_research) => {
+    // Lakukan permintaan fetch untuk menghapus data dengan id_pkm tertentu
+    fetch(`http://localhost:5000/research/${id_research}`, {
       method: "DELETE", // Menggunakan metode DELETE untuk menghapus data
       headers: {
         Accept: "application/json",
@@ -114,46 +134,62 @@ const UpdateResearch = () => {
         if (!response.ok) {
           throw new Error("Gagal menghapus data PKM");
         }
-        // Jika berhasil dihapus, perbarui data PKM yang ditampilkan
-        getListPKM();
+        // Jika berhasil dihapus, perbarui data yang ditampilkan
+        getListResearch();
       })
       .catch((err) => {
-        console.error("Gagal menghapus data PKM:", err);
+        console.error("Gagal menghapus data Research:", err);
       });
   };
 
   const handleAddResearch = () => {
-    // Lakukan permintaan fetch untuk menambahkan data research baru ke server
-    fetch(`http://localhost:5000/research`, {
-      method: "POST", // Menggunakan metode POST untuk menambahkan data
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...newResearch,
-        id_dosen: dataAkun.profile_dosen.id_dosen,
-        publication_date: moment(newResearch.publication_date).format(
-          "YYYY-MM-DD"
-        ),
-      }), // Mengirim data research baru
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Gagal menambahkan data research");
-        }
-        // Jika berhasil ditambahkan, perbarui data research yang ditampilkan
-        getListResearch();
-        setNewResearch({
-          research_title: "",
-          publication_date: "",
-          doi_link: "",
-        });
-        setShowAddResearchModal(false);
-      })
-      .catch((err) => {
-        console.error("Gagal menambahkan data research:", err);
-      });
+    if (newResearch.pdf_research) {
+      // Mengonversi berkas PDF menjadi base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const pdfBase64 = reader.result.split(",")[1];
+
+        // Lakukan permintaan fetch untuk menambahkan data research baru ke server
+        fetch(`http://localhost:5000/research`, {
+          method: "POST", // Menggunakan metode POST untuk menambahkan data
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...newResearch,
+            id_dosen: dataAkun.profile_dosen.id_dosen,
+            publication_date: moment(newResearch.publication_date).format(
+              "YYYY-MM-DD"
+            ),
+            pdf_research: `data:application/pdf;base64,${pdfBase64}`, // Format data PDF base64
+          }), // Mengirim data research baru
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Gagal menambahkan data research");
+            }
+            // Jika berhasil ditambahkan, perbarui data research yang ditampilkan
+            getListResearch();
+            setNewResearch({
+              research_title: "",
+              publication_date: "",
+              doi_link: "",
+              pdf_research: "",
+              description: "",
+            });
+            setShowAddResearchModal(false);
+          })
+          .catch((err) => {
+            console.error("Gagal menambahkan data research:", err);
+          });
+      };
+
+      reader.readAsDataURL(newResearch.pdf_research);
+    } else {
+      // Jika berkas PDF belum dipilih
+      alert("Silakan pilih berkas PDF terlebih dahulu.");
+    }
   };
 
   return (
@@ -184,6 +220,8 @@ const UpdateResearch = () => {
                       <th>Title</th>
                       <th>Publication Date</th>
                       <th>DOI Link</th>
+                      <th>PDF Research</th>
+                      <th>Description</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -195,6 +233,19 @@ const UpdateResearch = () => {
                         <td>{item.research_title}</td>
                         <td>{item.publication_date}</td>
                         <td>{item.doi_link}</td>
+                        <td>
+                          <button
+                            className="btn-ghost text-primary"
+                            onClick={() =>
+                              navigate(
+                                `/dashboard/pdfreview/research/${item.id_research}`
+                              )
+                            }
+                          >
+                            Lihat PDF
+                          </button>
+                        </td>
+                        <td>{item.description}</td>
                         <td>
                           <div className="flex">
                             <button
@@ -222,6 +273,101 @@ const UpdateResearch = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal untuk menambahkan data research */}
+      {showAddResearchModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg pb-5">Add Data Research</h3>
+            <div className="form-control w-full">
+              <label className="label">Research Title</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newResearch.research_title}
+                onChange={(e) =>
+                  setNewResearch({
+                    ...newResearch,
+                    research_title: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">Publication Date</label>
+              <input
+                type="date"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newResearch.publication_date}
+                onChange={(e) =>
+                  setNewResearch({
+                    ...newResearch,
+                    publication_date: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">DOI Link</label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newResearch.doi_link}
+                onChange={(e) =>
+                  setNewResearch({
+                    ...newResearch,
+                    doi_link: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full mt-">
+              <label className="label">Description</label>
+              <textarea
+                rows="5"
+                type="text"
+                placeholder="Type here"
+                className="p-2.5 input input-bordered w-full"
+                value={newResearch.description}
+                onChange={(e) =>
+                  setNewResearch({
+                    ...newResearch,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">PDF File</label>
+              <input
+                type="file"
+                className="input input-bordered w-full"
+                onChange={(e) =>
+                  setNewResearch({
+                    ...newResearch,
+                    pdf_research: e.target.files[0],
+                  })
+                }
+              />
+            </div>
+
+            <div className="modal-action">
+              <button
+                className="btn mr-2"
+                onClick={() => setShowAddResearchModal(false)}
+              >
+                Close
+              </button>
+              <button className="btn btn-primary" onClick={handleAddResearch}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal untuk update data Research */}
       {selectedResearch && (
@@ -276,6 +422,34 @@ const UpdateResearch = () => {
                 }
               />
             </div>
+            <div className="form-control w-full">
+              <label className="label">Description</label>
+              <textarea
+                rows="4"
+                type="text"
+                placeholder="Type here"
+                className=" block p-2.5 input input-bordered w-full"
+                value={selectedResearch.description}
+                // Handle perubahan pada input
+                onChange={(e) =>
+                  setSelectedResearch({
+                    ...selectedResearch,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">PDF Research</label>
+              <input
+                type="file"
+                accept=".pdf"
+                className="input w-full"
+                onChange={(e) => {
+                  handleFileChangeUpdate(e);
+                }}
+              />
+            </div>
             <div className="modal-action">
               <button
                 className="btn mr-2"
@@ -294,71 +468,6 @@ const UpdateResearch = () => {
             </div>
           </div>
         </dialog>
-      )}
-
-      {/* Modal untuk menambahkan data research */}
-      {showAddResearchModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg pb-5">Add Data Research</h3>
-            <div className="form-control w-full">
-              <label className="label">Research Title</label>
-              <input
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered w-full"
-                value={newResearch.research_title}
-                onChange={(e) =>
-                  setNewResearch({
-                    ...newResearch,
-                    research_title: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="form-control w-full">
-              <label className="label">Publication Date</label>
-              <input
-                type="date"
-                placeholder="Type here"
-                className="input input-bordered w-full"
-                value={newResearch.publication_date}
-                onChange={(e) =>
-                  setNewResearch({
-                    ...newResearch,
-                    publication_date: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="form-control w-full">
-              <label className="label">DOI Link</label>
-              <input
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered w-full"
-                value={newResearch.doi_link}
-                onChange={(e) =>
-                  setNewResearch({
-                    ...newResearch,
-                    doi_link: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="modal-action">
-              <button
-                className="btn mr-2"
-                onClick={() => setShowAddResearchModal(false)}
-              >
-                Close
-              </button>
-              <button className="btn btn-primary" onClick={handleAddResearch}>
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

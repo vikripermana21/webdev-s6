@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Topbar from "../../components/topbar";
 
 const DetailDosen = () => {
   const { dosenId } = useParams();
+  const navigate = useNavigate();
 
   const [dosen, setDosen] = useState({});
   const [eduHis, setEduHis] = useState([]);
@@ -150,9 +151,9 @@ const DetailDosen = () => {
             </div>
             <div className="flex flex-col items-start">
               <p className="text-2xl font-bold">{dosen.full_name}</p>
-              <p className="text-sm">{dosen.major}</p>
-              <p className="text-sm">{dosen.study_program}</p>
-              <p className="text-sm">{dosen.position}</p>
+              <p className="text-base">{dosen.major}</p>
+              <p className="text-base">{dosen.study_program}</p>
+              <p className="text-base">{dosen.position}</p>
             </div>
           </div>
           <div className="w-full rounded-md flex flex-col gap-10 items-start p-6 border h-max ">
@@ -180,21 +181,22 @@ const DetailDosen = () => {
                   <div className="flex flex-col gap-4">
                     {research.map((item) => (
                       <div className="flex flex-col items-start pt-3">
-                        <p className="text-left text-lg font-bold items-start">
+                        <a
+                          className="text-left text-lg font-bold items-start"
+                          onClick={() => {
+                            localStorage.setItem("idDosen", item.id_dosen);
+                            navigate(`/dosen/research/${item.id_research}`);
+                          }}
+                          href="#"
+                        >
                           {item.research_title}
-                        </p>
+                        </a>
                         <p className="">
                           Publication Date :{" "}
                           {new Date(item.publication_date).toLocaleDateString(
                             "en-GB"
                           )}
                         </p>
-                        <a
-                          href={item.doi_link}
-                          className="fill-primary-content"
-                        >
-                          {item.doi_link}
-                        </a>
                       </div>
                     ))}
                   </div>
@@ -205,9 +207,16 @@ const DetailDosen = () => {
                       <div className="flex flex-col items-start pt-3">
                         <div className="flex w-full justify-between items-center">
                           <div className="">
-                            <p className="flex text-left text-lg font-bold items-start">
+                            <a
+                              className="flex text-left text-lg font-bold items-start"
+                              onClick={() => {
+                                localStorage.setItem("idDosen", item.id_dosen);
+                                navigate(`/dosen/pkm/${item.id_pkm}`);
+                              }}
+                              href="#"
+                            >
                               {item.pkm_title}
-                            </p>
+                            </a>
                             <p className="flex text-left items-start">
                               PKM Date : {""}
                               {new Date(item.pkm_year).toLocaleDateString(
@@ -215,12 +224,6 @@ const DetailDosen = () => {
                               )}
                             </p>
                           </div>
-                          <button
-                            className="justify-end items-end"
-                            onClick={() => openPKMDetailModal(item.id_pkm)}
-                          >
-                            See Detail
-                          </button>
                         </div>
                       </div>
                     ))}

@@ -1,39 +1,47 @@
 import db from "../config/database.js";
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 
-const PKM = db.define('pkm', {
+const PKM = db.define(
+  "pkm",
+  {
     id_pkm: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     pkm_title: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     pkm_year: {
-        type: DataTypes.DATE,
+      type: DataTypes.DATE,
     },
     partner_name: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     description: {
-        type: DataTypes.TEXT,
+      type: DataTypes.TEXT,
     },
-    id_dosen: { // Define the foreign key field
-        type: DataTypes.INTEGER,
-        references: {
-            model: 'profile_dosen', // Reference the DataDiri model
-            key: 'id_dosen', // Reference the id_person field in DataDiri
-        },
+    pdf_pkm: {
+      type: DataTypes.TEXT,
     },
-}, {
-    tableName: 'pkm',
+    id_dosen: {
+      // Define the foreign key field
+      type: DataTypes.INTEGER,
+      references: {
+        model: "profile_dosen", // Reference the DataDiri model
+        key: "id_dosen", // Reference the id_person field in DataDiri
+      },
+    },
+  },
+  {
+    tableName: "pkm",
     timestamps: false,
-    freezeTableName: true
-});
+    freezeTableName: true,
+  }
+);
 
 export default PKM;
 
 (async () => {
-    await db.sync();
+  await db.sync();
 })();

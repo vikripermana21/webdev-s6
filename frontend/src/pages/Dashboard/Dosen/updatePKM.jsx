@@ -66,6 +66,21 @@ const UpdatePKM = () => {
       });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type === "application/pdf") {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedPKM({ ...selectedPKM, pdf_pkm: reader.result });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("Hanya file PDF yang diperbolehkan.");
+      }
+    }
+  };
+
   const handleUpdatePKM = () => {
     if (selectedPKM) {
       // Lakukan permintaan fetch untuk mengirim pembaruan data PKM ke server
@@ -121,36 +136,46 @@ const UpdatePKM = () => {
   };
 
   const handleAddPKM = () => {
-    // Lakukan permintaan fetch untuk menambahkan data PKM baru ke server
-    fetch(`http://localhost:5000/pkm`, {
-      method: "POST", // Menggunakan metode POST untuk menambahkan data
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...newPKM,
-        id_dosen: dataAkun.profile_dosen.id_dosen,
-        pkm_year: moment(newPKM.pkm_year).format("YYYY-MM-DD"),
-      }), // Mengirim data PKM baru
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Gagal menambahkan data PKM");
-        }
-        // Jika berhasil ditambahkan, perbarui data PKM yang ditampilkan
-        getListPKM();
-        setNewPKM({
-          pkm_title: "",
-          pkm_year: "",
-          partner_name: "",
-          description: "",
-        });
-        setShowAddPKMModal(false); // Tutup modal
-      })
-      .catch((err) => {
-        console.error("Gagal menambahkan data PKM:", err);
-      });
+    if (newPKM.pdf_pkm) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const pdfBase64 = reader.result.split(",")[1];
+        // Lakukan permintaan fetch untuk menambahkan data PKM baru ke server
+        fetch(`http://localhost:5000/pkm`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...newPKM,
+            id_dosen: dataAkun.profile_dosen.id_dosen,
+            pkm_year: moment(newPKM.pkm_year).format("YYYY-MM-DD"),
+            pdf_pkm: `data:application/pdf;base64,${pdfBase64}`, // Format data PDF base64
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Gagal menambahkan data PKM");
+            }
+            getListPKM();
+            setNewPKM({
+              pkm_title: "",
+              pkm_year: "",
+              partner_name: "",
+              description: "",
+              pdf_pkm: "", // Reset nilai pdf_pkm setelah diunggah
+            });
+            setShowAddPKMModal(false);
+          })
+          .catch((err) => {
+            console.error("Gagal menambahkan data PKM:", err);
+          });
+      };
+      reader.readAsDataURL(newPKM.pdf_pkm);
+    } else {
+      alert("Silakan pilih berkas PDF terlebih dahulu.");
+    }
   };
 
   return (
@@ -182,6 +207,7 @@ const UpdatePKM = () => {
                       <th>Year</th>
                       <th>Partner Name</th>
                       <th>Description</th>
+                      <th>PDF PKM</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -193,6 +219,19 @@ const UpdatePKM = () => {
                         <td>{item.pkm_year}</td>
                         <td>{item.partner_name}</td>
                         <td>{item.description}</td>
+                        <td>
+                          <button
+                            className="btn-ghost text-primary"
+                            onClick={() => {
+                              // localStorage.setItem("idPkm", item.id_pkm);
+                              navigate(
+                                `/dashboard/pdfreview/pkm/${item.id_pkm}`
+                              );
+                            }}
+                          >
+                            Lihat PDF
+                          </button>
+                        </td>
                         <td>
                           <div className="flex">
                             <button
@@ -287,6 +326,21 @@ const UpdatePKM = () => {
                 }
               />
             </div>
+            <div className="form-control w-full">
+              <label className="label">PDF File</label>
+              <input
+                type="file"
+                accept=".pdf"
+                className="input input-bordered w-full"
+                onChange={(e) => {
+                  setNewPKM({
+                    ...newPKM,
+                    pdf_pkm: e.target.files[0], // Menyimpan berkas PDF yang diunggah
+                  });
+                }}
+              />
+            </div>
+
             <div className="modal-action">
               <button
                 className="btn mr-2"
@@ -370,6 +424,17 @@ const UpdatePKM = () => {
                     description: e.target.value,
                   })
                 }
+              />
+            </div>
+            <div className="form-control w-full">
+              <label className="label">PDF PKM</label>
+              <input
+                type="file"
+                accept=".pdf"
+                className="input w-full"
+                onChange={(e) => {
+                  handleFileChange(e);
+                }}
               />
             </div>
             <div className="modal-action">
