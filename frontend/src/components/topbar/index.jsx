@@ -6,7 +6,7 @@ const Topbar = ({ contentType }) => {
   const navigate = useNavigate();
   const location = useLocation();
   return (
-    <div className="navbar bg-base-100 absolute top-0 w-full">
+    <div className="navbar bg-base-100 absolute top-0 w-full shadow-lg">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -42,7 +42,12 @@ const Topbar = ({ contentType }) => {
             <MdOutlineArrowBackIosNew />
           </button>
         ) : (
-          <p className="pl-3 font-bold normal-case text-xl">PolbanEduStaff</p>
+          <a
+            href="/"
+            className="pl-3 font-bold normal-case text-xl text-black hover:underline hover:text-black"
+          >
+            PolbanEduStaff
+          </a>
         )}
       </div>
       <div className="navbar-center hidden lg:flex">
